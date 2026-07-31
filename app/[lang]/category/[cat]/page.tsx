@@ -71,7 +71,7 @@ export default async function CategoryPage({
       <section className="container-x pb-16">
         <SectionHeading eyebrow={SITE.brand} title={dict.footer.sections} />
         <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-7">
-          {siblings.map((c, i) => (
+          {siblings.map((c) => (
             <Link
               key={c}
               href={`/${lang}/category/${c}`}

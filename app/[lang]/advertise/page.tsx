@@ -37,7 +37,7 @@ export default async function AdvertisePage({
     name: SITE.brand,
     url: `${SITE.domain}/${lang}`,
     description: a.subtitle,
-    contactPoint: WHATSAPP_NUMBERS.map((n, i) => ({
+    contactPoint: WHATSAPP_NUMBERS.map((n) => ({
       "@type": "ContactPoint",
       contactType: "sales",
       telephone: `+${n.raw}`,

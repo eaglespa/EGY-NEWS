@@ -1,5 +1,4 @@
 import Link from "next/link";
-import type { Article } from "@/lib/db";
 import { timeAgo, getLatest } from "@/lib/db";
 import type { Dict } from "@/lib/i18n";
 import type { Locale } from "@/lib/locales";

@@ -1,5 +1,13 @@
 import type { Locale } from "./locales";
 import { LOCALE_CODES, DEFAULT_LOCALE } from "./locales";
+import {
+  getWire,
+  getComments,
+  getShare,
+  type WireDict,
+  type CommentsDict,
+  type ShareDict,
+} from "./i18n-wire";
 
 export interface Dict {
   meta: { title: string; description: string };
@@ -21,6 +29,12 @@ export interface Dict {
   common: { latest: string; topStories: string; categories: string; readTime: string; byline: string };
   notFound: { title: string; text: string; home: string };
   category: { stories: string; other: string };
+}
+
+export interface DictWithExtras extends Dict {
+  wire: WireDict;
+  comments: CommentsDict;
+  share: ShareDict;
 }
 
 const en: Dict = {
@@ -564,8 +578,14 @@ export const DICTS: Record<Locale, Dict> = {
   en, ar, fr, de, es, pt, it, nl, ru, tr, fa, ur, hi, bn, zh, "zh-TW": zhTW, ja, ko, id, ms, vi, th, sw, ha, yo, ig, el, he, pl, ro,
 };
 
-export function getDict(locale: string): Dict {
-  return DICTS[locale as Locale] ?? DICTS[DEFAULT_LOCALE];
+export function getDict(locale: string): DictWithExtras {
+  const base = DICTS[locale as Locale] ?? DICTS[DEFAULT_LOCALE];
+  return {
+    ...base,
+    wire: getWire(locale),
+    comments: getComments(locale),
+    share: getShare(locale),
+  };
 }
 
 export const DICT_CODES = LOCALE_CODES;

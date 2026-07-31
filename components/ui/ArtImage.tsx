@@ -34,7 +34,7 @@ function pick(seed: string) {
   };
 }
 
-function PatternLayer({ pattern, seedA }: { pattern: Pattern; seedA: string }) {
+function PatternLayer({ pattern }: { pattern: Pattern }) {
   switch (pattern) {
     case "pyramids":
       return (
@@ -171,7 +171,7 @@ export function ArtImage({
 
         <rect width="800" height="600" fill={`url(#bg-${seedA})`} />
         <rect width="800" height="600" fill={`url(#glow-${seedA})`} />
-        <PatternLayer pattern={pattern} seedA={seedA} />
+        <PatternLayer pattern={pattern} />
         <rect width="800" height="600" fill={`url(#sheen-${seedA})`} />
         <rect width="800" height="600" filter={`url(#noise-${seedA})`} />
         <rect width="800" height="600" fill="#000" opacity="0.16" />

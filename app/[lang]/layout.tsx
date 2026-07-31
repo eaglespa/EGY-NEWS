@@ -45,7 +45,6 @@ export async function generateMetadata({
   params: Promise<{ lang: string }>;
 }): Promise<Metadata> {
   const { lang } = await params;
-  const locale = getLocale(lang);
   const dict = getDict(lang);
 
   const languages: Record<string, string> = {
@@ -111,7 +110,6 @@ export default async function LangLayout({
   if (!isLocale(lang)) notFound();
 
   const locale = getLocale(lang) as { code: Locale; dir: "ltr" | "rtl" };
-  const dict = getDict(lang);
 
   return (
     <html

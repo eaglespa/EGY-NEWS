@@ -20,6 +20,7 @@ export function Header({ lang }: { lang: Locale }) {
   const items: NavItem[] = [
     { href: `/${lang}`, label: t.home },
     ...CATEGORIES.map((c) => ({ href: `/${lang}${catHrefs[c]}`, label: t[c] })),
+    { href: `/${lang}/live`, label: dict.wire.liveLabel },
     { href: `/${lang}/search`, label: t.search },
     { href: `/${lang}/advertise`, label: t.advertise },
   ];
@@ -28,7 +29,7 @@ export function Header({ lang }: { lang: Locale }) {
     <header className="sticky top-0 z-50">
       <div className="border-b border-line bg-bg2/70 font-mono text-[10px] tracking-[0.22em] backdrop-blur-xl">
         <div className="container-x flex items-center justify-between gap-4 py-1.5 text-ink3">
-          <span className="hidden truncate sm:block">ROMERO'S STUDIOS · {dict.common.topStories}</span>
+          <span className="hidden truncate sm:block">ROMERO&apos;S STUDIOS · {dict.common.topStories}</span>
           <span className="truncate">{dict.meta.title}</span>
           <div className="flex items-center gap-3 whitespace-nowrap">
             <LiveClock locale={lang} />
@@ -71,6 +72,13 @@ export function Header({ lang }: { lang: Locale }) {
                 {t[c]}
               </Link>
             ))}
+            <Link
+              href={`/${lang}/live`}
+              className="inline-flex items-center gap-1.5 rounded-full px-3.5 py-2 text-sm font-medium text-gold transition-colors hover:bg-panel"
+            >
+              <span className="live-dot inline-block size-1.5 rounded-full bg-alert" aria-hidden />
+              {dict.wire.liveLabel}
+            </Link>
           </nav>
 
           <div className="ms-auto flex items-center gap-2">

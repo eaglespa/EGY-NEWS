@@ -78,7 +78,7 @@ function detectCategory(query: string): Category | null {
   return null;
 }
 
-function listTitles(items: AgentIndexItem[], ar: boolean): string {
+function listTitles(items: AgentIndexItem[]): string {
   return items.map((a, i) => `${i + 1}. ${a.title}`).join("\n");
 }
 
@@ -104,16 +104,16 @@ export function askAgent(rawQuery: string, items: AgentIndexItem[]): AgentReply 
         intent: "breaking",
         articles: picked,
         text: ar
-          ? "لا توجد أخبار عاجلة في هذه اللحظة. إليك أحدث القصص من غرفة التحرير:\n" + listTitles(picked, true)
-          : "Nothing is flagged as breaking this exact moment. Here are the freshest stories from the newsroom:\n" + listTitles(picked, false),
+          ? "لا توجد أخبار عاجلة في هذه اللحظة. إليك أحدث القصص من غرفة التحرير:\n" + listTitles(picked)
+          : "Nothing is flagged as breaking this exact moment. Here are the freshest stories from the newsroom:\n" + listTitles(picked),
       };
     }
     return {
       intent: "breaking",
       articles: picked,
       text: ar
-        ? `هذه الأخبار العاجلة الآن:\n${listTitles(picked, true)}`
-        : `These stories are breaking right now:\n${listTitles(picked, false)}`,
+        ? `هذه الأخبار العاجلة الآن:\n${listTitles(picked)}`
+        : `These stories are breaking right now:\n${listTitles(picked)}`,
     };
   }
 
@@ -123,8 +123,8 @@ export function askAgent(rawQuery: string, items: AgentIndexItem[]): AgentReply 
       intent: "latest",
       articles: picked,
       text: ar
-        ? `أحدث ما في غرفة التحرير:\n${listTitles(picked, true)}`
-        : `The latest from the newsroom:\n${listTitles(picked, false)}`,
+        ? `أحدث ما في غرفة التحرير:\n${listTitles(picked)}`
+        : `The latest from the newsroom:\n${listTitles(picked)}`,
     };
   }
 
@@ -143,8 +143,8 @@ export function askAgent(rawQuery: string, items: AgentIndexItem[]): AgentReply 
       intent: "greeting",
       articles: sorted.slice(0, 2),
       text: ar
-        ? `أهلًا بك! أنا وكيل إيجي نيوز الذكي. اسألني: ما الأخبار العاجلة؟ أو لخّص الاقتصاد. أو اطلب أي موضوع.\n\nفي هذه الأثناء، إليك ما يجري:\n${listTitles(sorted.slice(0, 2), true)}`
-        : `Hello! I'm the EGY NEWS agent. Ask me: "What's breaking?", "Summarize the economy", or search any topic.\n\nMeanwhile, here's what's moving:\n${listTitles(sorted.slice(0, 2), false)}`,
+        ? `أهلًا بك! أنا وكيل إيجي نيوز الذكي. اسألني: ما الأخبار العاجلة؟ أو لخّص الاقتصاد. أو اطلب أي موضوع.\n\nفي هذه الأثناء، إليك ما يجري:\n${listTitles(sorted.slice(0, 2))}`
+        : `Hello! I'm the EGY NEWS agent. Ask me: "What's breaking?", "Summarize the economy", or search any topic.\n\nMeanwhile, here's what's moving:\n${listTitles(sorted.slice(0, 2))}`,
     };
   }
 
@@ -172,8 +172,8 @@ export function askAgent(rawQuery: string, items: AgentIndexItem[]): AgentReply 
         intent: "category",
         articles: picked,
         text: ar
-          ? `أحدث قصص ${CATEGORY_NAMES[category].ar}:\n${listTitles(picked, true)}`
-          : `The latest in ${CATEGORY_NAMES[category].en}:\n${listTitles(picked, false)}`,
+          ? `أحدث قصص ${CATEGORY_NAMES[category].ar}:\n${listTitles(picked)}`
+          : `The latest in ${CATEGORY_NAMES[category].en}:\n${listTitles(picked)}`,
       };
     }
   }
@@ -185,8 +185,8 @@ export function askAgent(rawQuery: string, items: AgentIndexItem[]): AgentReply 
         intent: "category",
         articles: picked,
         text: ar
-          ? `هذه قصص من قسم ${CATEGORY_NAMES[category].ar}:\n${listTitles(picked, true)}`
-          : `Here's what's happening in ${CATEGORY_NAMES[category].en}:\n${listTitles(picked, false)}`,
+          ? `هذه قصص من قسم ${CATEGORY_NAMES[category].ar}:\n${listTitles(picked)}`
+          : `Here's what's happening in ${CATEGORY_NAMES[category].en}:\n${listTitles(picked)}`,
       };
     }
   }

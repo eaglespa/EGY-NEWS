@@ -62,7 +62,7 @@ export function MobileNav({ items, menuLabel }: { items: NavItem[]; menuLabel: s
               </Link>
             ))}
           </nav>
-          <div className="container-x pb-8 pt-4 text-xs text-ink3">30 languages · Romero's Studios</div>
+          <div className="container-x pb-8 pt-4 text-xs text-ink3">30 languages · Romero&apos;s Studios</div>
         </div>
       )}
     </div>

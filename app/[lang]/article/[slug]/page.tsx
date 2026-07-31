@@ -1,13 +1,15 @@
 import type { Metadata } from "next";
 import Script from "next/script";
 import { notFound } from "next/navigation";
-import { getArticle, getRelated, formatDate, timeAgo, CATEGORIES } from "@/lib/db";
+import { getArticle, getRelated, formatDate, timeAgo } from "@/lib/db";
 import { getDict } from "@/lib/i18n";
 import { LOCALE_CODES, getLocale, type Locale } from "@/lib/locales";
 import { SITE } from "@/lib/site";
 import { ArtImage } from "@/components/ui/ArtImage";
 import { NewsCard } from "@/components/site/NewsCard";
 import { AdBanner } from "@/components/site/AdBanner";
+import { ShareBar } from "@/components/site/ShareBar";
+import { Comments } from "@/components/site/Comments";
 import Link from "next/link";
 
 export async function generateStaticParams() {
@@ -23,7 +25,6 @@ export async function generateMetadata({
   const { lang, slug } = await params;
   const article = getArticle(slug);
   if (!article) return {};
-  const dict = getDict(lang);
   const url = `${SITE.domain}/${lang}/article/${slug}`;
 
   return {
@@ -71,6 +72,7 @@ export default async function ArticlePage({
   const dict = getDict(lang);
   const related = getRelated(article);
   const url = `${SITE.domain}/${lang}/article/${slug}`;
+  const shareUrl = `${url}?source=share`;
 
   const newsJsonLd = {
     "@context": "https://schema.org",
@@ -196,6 +198,8 @@ export default async function ArticlePage({
               ))}
             </div>
 
+            <ShareBar title={article.title} url={shareUrl} labels={dict.share} />
+
             <div className="mt-10 flex items-center justify-between gap-4 rounded-2xl border border-line bg-panel p-5">
               <p className="font-mono text-[11px] tracking-widest text-ink3 uppercase">
                 {dict.footer.follow}
@@ -209,6 +213,8 @@ export default async function ArticlePage({
                 WhatsApp
               </a>
             </div>
+
+            <Comments lang={locale} slug={article.slug} labels={dict.comments} />
           </div>
 
           <aside className="space-y-8">

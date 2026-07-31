@@ -6,7 +6,6 @@ export function LiveClock({ locale }: { locale: string }) {
   const [now, setNow] = useState<string>("");
 
   useEffect(() => {
-    let timer: ReturnType<typeof setInterval>;
     const tick = () => {
       try {
         setNow(
@@ -22,7 +21,7 @@ export function LiveClock({ locale }: { locale: string }) {
       }
     };
     tick();
-    timer = setInterval(tick, 1000);
+    const timer = setInterval(tick, 1000);
     return () => clearInterval(timer);
   }, [locale]);
 

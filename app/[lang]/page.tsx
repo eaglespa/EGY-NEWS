@@ -11,6 +11,7 @@ import { NewsCard } from "@/components/site/NewsCard";
 import { SectionHeading } from "@/components/site/SectionHeading";
 import { AdBanner } from "@/components/site/AdBanner";
 import { AgentChat } from "@/components/site/AgentChat";
+import { LiveWire } from "@/components/site/LiveWire";
 import Link from "next/link";
 
 export async function generateMetadata({
@@ -138,6 +139,12 @@ export default async function HomePage({
 
         <section className="container-x pb-8">
           <AdBanner lang={locale} />
+        </section>
+
+        <section className="border-t border-line bg-bg2/40">
+          <div className="container-x py-14">
+            <LiveWire lang={locale} labels={dict.wire} />
+          </div>
         </section>
 
         <AgentChat lang={locale} dict={dict} />

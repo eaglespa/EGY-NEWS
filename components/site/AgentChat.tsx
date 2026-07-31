@@ -13,6 +13,10 @@ interface Msg {
   articles?: AgentIndexItem[];
 }
 
+function typingDelay() {
+  return 480 + Math.random() * 420;
+}
+
 export function AgentChat({ lang, dict }: { lang: Locale; dict: Dict }) {
   const d = dict.agent;
   const [messages, setMessages] = useState<Msg[]>([{ role: "agent", text: d.greet }]);
@@ -37,7 +41,7 @@ export function AgentChat({ lang, dict }: { lang: Locale; dict: Dict }) {
       const reply = askAgent(text, AGENT_INDEX);
       setMessages((m) => [...m, { role: "agent", text: reply.text, articles: reply.articles }]);
       setBusy(false);
-    }, 480 + Math.random() * 420);
+    }, typingDelay());
   }
 
   function onSubmit(e: FormEvent) {
