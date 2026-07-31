@@ -1,0 +1,16 @@
+{
+  "name": "EGY NEWS — World News Through Cairo",
+  "short_name": "EGY NEWS",
+  "description": "Independent digital news station reporting from Cairo to the world in 30 languages.",
+  "start_url": "/en",
+  "display": "standalone",
+  "background_color": "#06070a",
+  "theme_color": "#06070a",
+  "icons": [
+    {
+      "src": "/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ]
+}
