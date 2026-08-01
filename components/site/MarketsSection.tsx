@@ -62,6 +62,57 @@ export function MarketsSection({ labels }: { labels: MarketsDict }) {
     }
   }
 
+  const fxList = fx ?? Array.from({ length: 12 });
+  const stockList = stocks ?? Array.from({ length: 10 });
+
+  const labelChip = (text: string, suffix: string) => (
+    <span key={"lbl" + suffix} className="flex shrink-0 items-center gap-2 whitespace-nowrap font-mono text-[10px] font-black tracking-[0.25em] text-gold uppercase">
+      {text}
+    </span>
+  );
+
+  const fxChip = (f: FxRate | undefined, i: number, suffix: string) => (
+    <span key={(f?.code ?? "fx" + i) + suffix} className={`flex shrink-0 items-center gap-2.5 whitespace-nowrap ${f ? "" : "animate-pulse"}`}>
+      <span className="size-1 rounded-full bg-gold/60" aria-hidden />
+      <span className="font-mono text-[10px] font-semibold tracking-[0.16em] text-ink3 uppercase">
+        USD/{f?.code ?? "…"}
+      </span>
+      <span className="font-display text-lg font-black tracking-tight text-ink tabular-nums">
+        {f ? fmtNum(f.perUsd) : "····"}
+      </span>
+    </span>
+  );
+
+  const stockChip = (s: StockQuote | undefined, i: number, suffix: string) => {
+    const up = (s?.changePct ?? 0) >= 0;
+    return (
+      <span key={(s?.symbol ?? "stk" + i) + suffix} className={`flex shrink-0 items-center gap-2.5 whitespace-nowrap ${s ? "" : "animate-pulse"}`}>
+        <span className="size-1 rounded-full bg-gold/60" aria-hidden />
+        <span className="text-sm font-semibold text-ink">{s?.symbol ?? "…"}</span>
+        <span className="font-display text-base font-bold tracking-tight text-ink tabular-nums">
+          {s ? (s.currency === "USD" ? "$" : "") + fmtNum(s.price) : "····"}
+        </span>
+        {s && (
+          <span className={`font-mono text-[11px] font-bold tabular-nums ${up ? "text-good" : "text-alert"}`}>
+            {up ? "▲" : "▼"} {Math.abs(s.changePct).toFixed(2)}%
+          </span>
+        )}
+      </span>
+    );
+  };
+
+  const marqueeRow = (ariaHidden: boolean) => {
+    const suffix = ariaHidden ? "-b" : "";
+    return (
+      <div className="flex shrink-0 items-center gap-8 pe-8" aria-hidden={ariaHidden}>
+        {labelChip(labels.fxTitle, suffix + "fx")}
+        {fxList.map((f, i) => fxChip(f as FxRate | undefined, i, suffix))}
+        {labelChip(labels.stocksTitle, suffix + "stk")}
+        {stockList.map((s, i) => stockChip(s as StockQuote | undefined, i, suffix))}
+      </div>
+    );
+  };
+
   return (
     <div>
       <div className="mb-6 flex flex-wrap items-end justify-between gap-4">
@@ -99,79 +150,10 @@ export function MarketsSection({ labels }: { labels: MarketsDict }) {
         </p>
       )}
 
-      <div className="grid gap-6 lg:grid-cols-[1fr_1.35fr]">
-        <div className="glass rounded-2xl p-5">
-          <h3 className="flex items-center gap-2 font-mono text-[10px] font-semibold tracking-[0.25em] text-gold uppercase">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round">
-              <circle cx="12" cy="12" r="9" />
-              <path d="M3.5 9h17M3.5 15h17M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18" />
-            </svg>
-            {labels.fxTitle}
-          </h3>
-          <div className="mt-4 grid grid-cols-2 gap-2 sm:grid-cols-3">
-            {(fx ?? Array.from({ length: 12 })).map((f, i) => {
-              const isPlaceholder = !fx;
-              const rate = isPlaceholder ? null : (f as FxRate);
-              return (
-                <div
-                  key={rate?.code ?? i}
-                  className={`rounded-xl border border-line bg-panel p-3 ${isPlaceholder ? "animate-pulse" : ""}`}
-                >
-                  <div className="flex items-center justify-between">
-                    <span className="font-mono text-[10px] font-semibold tracking-widest text-ink3">
-                      USD/{rate?.code ?? "…"}
-                    </span>
-                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" className="text-gold/70">
-                      <path d="M3 12h14M13 6l6 6-6 6" />
-                    </svg>
-                  </div>
-                  <p className="mt-1.5 truncate font-display text-lg font-black tracking-tight text-ink">
-                    {rate ? fmtNum(rate.perUsd) : "····"}
-                  </p>
-                  <p className="truncate font-mono text-[9px] tracking-wider text-ink3 uppercase">
-                    {rate?.name ?? ""}
-                  </p>
-                </div>
-              );
-            })}
-          </div>
-        </div>
-
-        <div className="glass rounded-2xl p-5">
-          <h3 className="flex items-center gap-2 font-mono text-[10px] font-semibold tracking-[0.25em] text-gold uppercase">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round">
-              <path d="M3 17l6-6 4 4 8-8" />
-              <path d="M15 7h6v6" />
-            </svg>
-            {labels.stocksTitle}
-          </h3>
-          <ul className="mt-3 divide-y divide-line/70">
-            {(stocks ?? Array.from({ length: 10 })).map((s, i) => {
-              const isPlaceholder = !stocks;
-              const st = isPlaceholder ? null : (s as StockQuote);
-              const up = (st?.changePct ?? 0) >= 0;
-              return (
-                <li key={st?.symbol ?? i} className={`flex items-center justify-between gap-3 py-3 ${isPlaceholder ? "animate-pulse" : ""}`}>
-                  <div className="min-w-0">
-                    <p className="truncate text-sm font-semibold text-ink">
-                      {st?.name ?? "…"}
-                    </p>
-                    <p className="font-mono text-[10px] tracking-widest text-ink3 uppercase">
-                      {st?.symbol ?? ""}
-                    </p>
-                  </div>
-                  <div className="text-end">
-                    <p className="font-display text-base font-bold tracking-tight text-ink tabular-nums">
-                      {st ? `${st.currency === "USD" ? "$" : ""}${fmtNum(st.price)}` : "····"}
-                    </p>
-                    <p className={`font-mono text-[11px] font-bold tabular-nums ${up ? "text-good" : "text-alert"}`}>
-                      {st ? `${up ? "▲" : "▼"} ${Math.abs(st.changePct).toFixed(2)}%` : ""}
-                    </p>
-                  </div>
-                </li>
-              );
-            })}
-          </ul>
+      <div className="relative overflow-hidden edge-fade-l py-1">
+        <div className="animate-marquee flex w-max items-center">
+          {marqueeRow(false)}
+          {marqueeRow(true)}
         </div>
       </div>
     </div>
