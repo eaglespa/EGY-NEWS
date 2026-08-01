@@ -101,10 +101,6 @@ function round(n: number): string {
   return `${Math.round(n)}°`;
 }
 
-function localTime(c: CityWeather): string {
-  return c.localTime.split("T")[1]?.slice(0, 5) ?? "";
-}
-
 export function WeatherSection({ labels }: { labels: WeatherDict }) {
   const [cities, setCities] = useState<CityWeather[] | null>(null);
   const [error, setError] = useState(false);
@@ -146,6 +142,38 @@ export function WeatherSection({ labels }: { labels: WeatherDict }) {
     }
   }
 
+  const list = cities ?? Array.from({ length: 10 });
+
+  const cityChip = (c: CityWeather | undefined, i: number, suffix: string) => {
+    const kind = c ? kindFromCode(c.code) : "cloudy";
+    return (
+      <span
+        key={(c?.id ?? "ph" + i) + suffix}
+        className={`flex shrink-0 items-center gap-2.5 whitespace-nowrap ${c ? "" : "animate-pulse"}`}
+      >
+        <span className="size-1 rounded-full bg-gold/60" aria-hidden />
+        <WeatherIcon kind={kind} className="size-5 shrink-0 text-gold" />
+        <span className="max-w-[12rem] truncate font-display text-lg font-bold text-ink">
+          {c?.name ?? "…"}
+        </span>
+        <span className="font-display text-lg font-black text-ink2">
+          {c ? round(c.temp) : "··"}
+        </span>
+        {c && (
+          <span className="font-mono text-[10px] font-semibold tracking-[0.16em] text-ink3 uppercase">
+            {labels[KIND_LABEL[kind]]}
+          </span>
+        )}
+      </span>
+    );
+  };
+
+  const marqueeRow = (ariaHidden: boolean) => (
+    <div className="flex shrink-0 items-center gap-8 pe-8" aria-hidden={ariaHidden}>
+      {list.map((c, i) => cityChip(c as CityWeather | undefined, i, ariaHidden ? "-b" : ""))}
+    </div>
+  );
+
   return (
     <div>
       <div className="mb-6 flex flex-wrap items-end justify-between gap-4">
@@ -183,65 +211,11 @@ export function WeatherSection({ labels }: { labels: WeatherDict }) {
         </p>
       )}
 
-      <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-5">
-        {(cities ?? Array.from({ length: 10 })).map((c, i) => {
-          const isPlaceholder = !cities;
-          const city = isPlaceholder ? null : (c as CityWeather);
-          const kind = city ? kindFromCode(city.code) : "cloudy";
-          return (
-            <article
-              key={city?.id ?? i}
-              className={`glass rounded-2xl p-4 transition-colors hover:border-gold/40 ${isPlaceholder ? "animate-pulse" : ""}`}
-            >
-              <div className="flex items-start justify-between gap-2">
-                <div className="min-w-0">
-                  <h3 className="truncate font-display text-base font-bold text-ink">
-                    {city?.name ?? "…"}
-                  </h3>
-                  <p className="truncate font-mono text-[9px] tracking-[0.18em] text-ink3 uppercase">
-                    {city?.country ?? ""}
-                  </p>
-                </div>
-                <WeatherIcon kind={kind} className="size-8 shrink-0 text-gold" />
-              </div>
-              <p className="mt-3 font-display text-4xl font-black tracking-tight text-ink">
-                {city ? round(city.temp) : "··"}
-              </p>
-              <p className="mt-0.5 text-xs leading-tight text-ink2">
-                {city ? labels[KIND_LABEL[kind]] : ""}
-              </p>
-              <div className="mt-3 flex items-center justify-between border-t border-line/70 pt-2.5 font-mono text-[10px] text-ink3">
-                <span>
-                  {labels.hi} {city ? round(city.high) : "··"}
-                </span>
-                <span>
-                  {labels.lo} {city ? round(city.low) : "··"}
-                </span>
-              </div>
-              {city && (
-                <div className="mt-1.5 flex items-center justify-between font-mono text-[10px] text-ink3">
-                  <span className="inline-flex items-center gap-1">
-                    <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
-                      <path d="M3 8h18M6 12h12M9 16h6" />
-                    </svg>
-                    {Math.round(city.wind)} km/h
-                  </span>
-                  <span className="inline-flex items-center gap-1">
-                    <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                      <path d="M12 3s6 6.5 6 10.5a6 6 0 0 1-12 0C6 9.5 12 3 12 3Z" />
-                    </svg>
-                    {Math.round(city.humidity)}%
-                  </span>
-                </div>
-              )}
-              {city?.localTime && (
-                <p className="mt-1.5 font-mono text-[10px] tracking-widest text-gold/70 uppercase">
-                  {localTime(city)}
-                </p>
-              )}
-            </article>
-          );
-        })}
+      <div className="relative overflow-hidden edge-fade-l py-1">
+        <div className="animate-marquee flex w-max items-center">
+          {marqueeRow(false)}
+          {marqueeRow(true)}
+        </div>
       </div>
     </div>
   );

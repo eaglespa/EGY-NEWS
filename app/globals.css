@@ -226,6 +226,9 @@ body {
 .animate-marquee:hover {
   animation-play-state: paused;
 }
+[dir="rtl"] .animate-marquee {
+  animation-direction: reverse;
+}
 
 @keyframes float-y {
   0%,
