@@ -69,21 +69,16 @@ export function Hero({ lang, dict }: { lang: Locale; dict: Dict }) {
           </div>
         </div>
 
-        <div className="relative z-10 min-h-[420px] lg:min-h-[520px]">
+        <div className="relative z-10 flex min-h-[420px] flex-col justify-center gap-4 lg:min-h-[520px] lg:gap-5 lg:ps-10">
           <div aria-hidden className="absolute -top-16 end-0 size-64 rounded-full border border-gold/20 animate-spin-slow" />
           <div aria-hidden className="absolute -top-10 end-10 size-44 rounded-full border border-nile/20 animate-spin-slow" style={{ animationDirection: "reverse", animationDuration: "34s" }} />
           <div aria-hidden className="absolute bottom-4 start-4 size-24 rounded-full bg-gold/10 blur-2xl animate-orb" />
 
-          <div className="absolute inset-x-0 top-0 lg:ps-10">
-            {featured.map((a, i) => (
+          {featured.map((a, i) => (
               <div
                 key={a.id}
-                className="animate-float absolute inset-x-0"
-                style={{
-                  top: `${i * 34}%`,
-                  animationDelay: `${-i * 2.8}s`,
-                  zIndex: 3 - i,
-                }}
+                className="animate-float-tiny relative z-10"
+                style={{ animationDelay: `${-i * 2.8}s` }}
               >
                 <TiltCard max={7}>
                   <Link
@@ -131,7 +126,6 @@ export function Hero({ lang, dict }: { lang: Locale; dict: Dict }) {
                 </TiltCard>
               </div>
             ))}
-          </div>
         </div>
       </div>
     </section>
