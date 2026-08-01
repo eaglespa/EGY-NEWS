@@ -1,4 +1,5 @@
 import { XMLParser } from "fast-xml-parser";
+import { mapLimit } from "./async";
 
 export interface WireItem {
   id: string;
@@ -40,71 +41,81 @@ function googleNewsUrl(query: string, hl: string, gl: string, ceid: string): str
   return `${base}?${params.toString()}`;
 }
 
+const EN_REGION = ["en-US", "US", "US:en"] as const;
+const AR_REGION = ["ar", "EG", "EG:ar"] as const;
+
+function googleSite(
+  site: string,
+  region: readonly [string, string, string] = EN_REGION,
+): string {
+  return googleNewsUrl(`site:${site}`, region[0], region[1], region[2]);
+}
+
+function src(
+  id: string,
+  name: string,
+  site: string,
+  kind: "google" | "rss",
+  url: string,
+  lang: string,
+): FeedSource {
+  return { id, name, site, kind, url, lang };
+}
+
 export const WIRE_SOURCES: FeedSource[] = [
-  {
-    id: "axios",
-    name: "Axios",
-    site: "https://www.axios.com",
-    kind: "google",
-    url: googleNewsUrl("site:axios.com", "en-US", "US", "US:en"),
-    lang: "en",
-  },
-  {
-    id: "reuters",
-    name: "Reuters",
-    site: "https://www.reuters.com",
-    kind: "google",
-    url: googleNewsUrl("site:reuters.com", "en-US", "US", "US:en"),
-    lang: "en",
-  },
-  {
-    id: "cnn",
-    name: "CNN",
-    site: "https://www.cnn.com",
-    kind: "google",
-    url: googleNewsUrl("site:cnn.com", "en-US", "US", "US:en"),
-    lang: "en",
-  },
-  {
-    id: "aljazeera",
-    name: "Al Jazeera",
-    site: "https://www.aljazeera.com",
-    kind: "google",
-    url: googleNewsUrl("site:aljazeera.com", "en-US", "US", "US:en"),
-    lang: "en",
-  },
-  {
-    id: "bbc",
-    name: "BBC",
-    site: "https://www.bbc.com/news",
-    kind: "rss",
-    url: "https://feeds.bbci.co.uk/news/world/rss.xml",
-    lang: "en",
-  },
-  {
-    id: "google-top",
-    name: "Google News",
-    site: "https://news.google.com",
-    kind: "google",
-    url: googleNewsUrl("", "en-US", "US", "US:en"),
-    lang: "en",
-  },
-  {
-    id: "google-top-ar",
-    name: "Google News AR",
-    site: "https://news.google.com",
-    kind: "google",
-    url: googleNewsUrl("", "ar", "EG", "EG:ar"),
-    lang: "ar",
-  },
-  {
-    id: "cairo-desk",
-    name: "Cairo Desk",
-    site: "https://news.google.com",
-    kind: "google",
-    url: googleNewsUrl("egypt", "ar", "EG", "EG:ar"),
-    lang: "ar",
-  },
+  src("google-top", "Google News", "https://news.google.com", "google", googleNewsUrl("", "en-US", "US", "US:en"), "en"),
+  src("google-top-ar", "Google News AR", "https://news.google.com", "google", googleNewsUrl("", "ar", "EG", "EG:ar"), "ar"),
+  src("cairo-desk", "Cairo Desk", "https://news.google.com", "google", googleNewsUrl("egypt", "ar", "EG", "EG:ar"), "ar"),
+  src("bbc", "BBC", "https://www.bbc.com/news", "rss", "https://feeds.bbci.co.uk/news/world/rss.xml", "en"),
+
+  src("msn", "MSN", "https://www.msn.com", "google", googleSite("msn.com"), "en"),
+  src("axios", "Axios", "https://www.axios.com", "google", googleSite("axios.com"), "en"),
+  src("reuters", "Reuters", "https://www.reuters.com", "google", googleSite("reuters.com"), "en"),
+  src("ap", "Associated Press", "https://apnews.com", "google", googleSite("apnews.com"), "en"),
+  src("cnn", "CNN", "https://www.cnn.com", "google", googleSite("cnn.com"), "en"),
+  src("aljazeera", "Al Jazeera", "https://www.aljazeera.com", "google", googleSite("aljazeera.com"), "en"),
+  src("guardian", "The Guardian", "https://www.theguardian.com", "google", googleSite("theguardian.com"), "en"),
+  src("nytimes", "The New York Times", "https://www.nytimes.com", "google", googleSite("nytimes.com"), "en"),
+  src("wapo", "The Washington Post", "https://www.washingtonpost.com", "google", googleSite("washingtonpost.com"), "en"),
+  src("bloomberg", "Bloomberg", "https://www.bloomberg.com", "google", googleSite("bloomberg.com"), "en"),
+  src("cnbc", "CNBC", "https://www.cnbc.com", "google", googleSite("cnbc.com"), "en"),
+  src("nbc", "NBC News", "https://www.nbcnews.com", "google", googleSite("nbcnews.com"), "en"),
+  src("cbs", "CBS News", "https://www.cbsnews.com", "google", googleSite("cbsnews.com"), "en"),
+  src("abc", "ABC News", "https://abcnews.go.com", "google", googleSite("abcnews.go.com"), "en"),
+  src("usatoday", "USA Today", "https://www.usatoday.com", "google", googleSite("usatoday.com"), "en"),
+  src("forbes", "Forbes", "https://www.forbes.com", "google", googleSite("forbes.com"), "en"),
+  src("yahoo", "Yahoo News", "https://news.yahoo.com", "google", googleSite("news.yahoo.com"), "en"),
+  src("huffpost", "HuffPost", "https://www.huffpost.com", "google", googleSite("huffpost.com"), "en"),
+  src("npr", "NPR", "https://www.npr.org", "google", googleSite("npr.org"), "en"),
+  src("politico", "Politico", "https://www.politico.com", "google", googleSite("politico.com"), "en"),
+  src("verge", "The Verge", "https://www.theverge.com", "google", googleSite("theverge.com"), "en"),
+  src("wired", "WIRED", "https://www.wired.com", "google", googleSite("wired.com"), "en"),
+  src("techcrunch", "TechCrunch", "https://techcrunch.com", "google", googleSite("techcrunch.com"), "en"),
+  src("insider", "Business Insider", "https://www.businessinsider.com", "google", googleSite("businessinsider.com"), "en"),
+  src("sky", "Sky News", "https://news.sky.com", "google", googleSite("news.sky.com"), "en"),
+  src("dw", "DW", "https://www.dw.com", "google", googleSite("dw.com"), "en"),
+  src("france24", "France 24", "https://www.france24.com", "google", googleSite("france24.com"), "en"),
+  src("indiatoday", "India Today", "https://www.indiatoday.in", "google", googleSite("indiatoday.in"), "en"),
+  src("toi", "The Times of India", "https://timesofindia.indiatimes.com", "google", googleSite("timesofindia.indiatimes.com"), "en"),
+  src("scmp", "South China Morning Post", "https://www.scmp.com", "google", googleSite("scmp.com"), "en"),
+  src("japantimes", "The Japan Times", "https://www.japantimes.co.jp", "google", googleSite("japantimes.co.jp"), "en"),
+  src("alarabiya", "Al Arabiya", "https://english.alarabiya.net", "google", googleSite("english.alarabiya.net"), "en"),
+  src("arabnews", "Arab News", "https://www.arabnews.com", "google", googleSite("arabnews.com"), "en"),
+  src("timesofisrael", "The Times of Israel", "https://www.timesofisrael.com", "google", googleSite("timesofisrael.com"), "en"),
+  src("thenational", "The National", "https://www.thenationalnews.com", "google", googleSite("thenationalnews.com"), "en"),
+
+  src("aljazeera-ar", "الجزيرة", "https://www.aljazeera.net", "google", googleSite("aljazeera.net", AR_REGION), "ar"),
+  src("bbc-ar", "بي بي سي عربي", "https://www.bbc.com/arabic", "google", googleSite("bbc.com/arabic", AR_REGION), "ar"),
+  src("alarabiya-ar", "العربية", "https://www.alarabiya.net", "google", googleSite("alarabiya.net", AR_REGION), "ar"),
+  src("sky-ar", "سكاي نيوز عربية", "https://www.skynewsarabia.com", "google", googleSite("skynewsarabia.com", AR_REGION), "ar"),
+  src("rt-ar", "RT Arabic", "https://arabic.rt.com", "google", googleSite("arabic.rt.com", AR_REGION), "ar"),
+  src("france24-ar", "فرانس 24", "https://www.france24.com/ar", "google", googleSite("france24.com/ar", AR_REGION), "ar"),
+  src("asharq", "الشرق", "https://asharq.com", "google", googleSite("asharq.com", AR_REGION), "ar"),
+  src("aawsat", "الشرق الأوسط", "https://aawsat.com", "google", googleSite("aawsat.com", AR_REGION), "ar"),
+  src("youm7", "اليوم السابع", "https://www.youm7.com", "google", googleSite("youm7.com", AR_REGION), "ar"),
+  src("ahram", "الأهرام", "https://www.ahram.org.eg", "google", googleSite("ahram.org.eg", AR_REGION), "ar"),
+  src("almasryalyoum", "المصري اليوم", "https://www.almasryalyoum.com", "google", googleSite("almasryalyoum.com", AR_REGION), "ar"),
+  src("elwatan", "الوطن", "https://www.elwatannews.com", "google", googleSite("elwatannews.com", AR_REGION), "ar"),
 ];
 
 const parser = new XMLParser({
@@ -192,7 +203,7 @@ function toWireItem(raw: Record<string, unknown>, src: FeedSource): WireItem | n
 
 async function fetchFeed(src: FeedSource): Promise<WireItem[]> {
   const controller = new AbortController();
-  const timer = setTimeout(() => controller.abort(), 9000);
+  const timer = setTimeout(() => controller.abort(), 7000);
   try {
     const res = await fetch(src.url, {
       signal: controller.signal,
@@ -231,20 +242,19 @@ export async function fetchWireSources(
   opts: { q?: string } = {},
 ): Promise<WireFeedResponse> {
   const q = opts.q?.trim().toLowerCase() ?? "";
-  const settled = await Promise.allSettled(WIRE_SOURCES.map((s) => fetchFeed(s)));
+  const results = await mapLimit(WIRE_SOURCES, 6, (s) => fetchFeed(s));
   const seen = new Set<string>();
   const items: WireItem[] = [];
 
-  settled.forEach((result) => {
-    if (result.status !== "fulfilled") return;
-    for (const item of result.value) {
+  for (const feed of results) {
+    for (const item of feed) {
       const key = item.title.toLowerCase().slice(0, 140);
       if (seen.has(key)) continue;
       seen.add(key);
       if (q && !matchesQuery(item, q)) continue;
       items.push(item);
     }
-  });
+  }
 
   items.sort(
     (a, b) => +new Date(b.publishedAt) - +new Date(a.publishedAt),
@@ -252,7 +262,7 @@ export async function fetchWireSources(
 
   return {
     fetchedAt: new Date().toISOString(),
-    items: items.slice(0, 80),
+    items: items.slice(0, 150),
     sources: WIRE_SOURCES.map((s) => ({ id: s.id, name: s.name, lang: s.lang })),
     total: items.length,
   };

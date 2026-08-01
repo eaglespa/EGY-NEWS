@@ -33,6 +33,41 @@ export interface ShareDict {
   copied: string;
 }
 
+export interface WeatherDict {
+  eyebrow: string;
+  title: string;
+  loading: string;
+  error: string;
+  retry: string;
+  updated: string;
+  feels: string;
+  wind: string;
+  humidity: string;
+  hi: string;
+  lo: string;
+  clear: string;
+  partly: string;
+  cloudy: string;
+  fog: string;
+  drizzle: string;
+  rain: string;
+  showers: string;
+  snow: string;
+  thunder: string;
+}
+
+export interface MarketsDict {
+  eyebrow: string;
+  title: string;
+  fxTitle: string;
+  stocksTitle: string;
+  loading: string;
+  error: string;
+  retry: string;
+  updated: string;
+  change: string;
+}
+
 export const WIRE: Record<Locale, WireDict> = {
   en: {
     liveLabel: "Live", title: "Live from the wire", eyebrow: "Real sources, real headlines",
@@ -442,4 +477,78 @@ export function getComments(locale: string): CommentsDict {
 
 export function getShare(locale: string): ShareDict {
   return SHARE[locale as Locale] ?? SHARE[DEFAULT_LOCALE];
+}
+
+export const WEATHER: Record<Locale, WeatherDict> = {
+  en: { eyebrow: "Global outlook", title: "Weather around the world", loading: "Checking conditions…", error: "Weather is unavailable right now.", retry: "Try again", updated: "Updated", feels: "Feels like", wind: "Wind", humidity: "Humidity", hi: "High", lo: "Low", clear: "Clear", partly: "Partly cloudy", cloudy: "Cloudy", fog: "Fog", drizzle: "Drizzle", rain: "Rain", showers: "Showers", snow: "Snow", thunder: "Thunderstorm" },
+  ar: { eyebrow: "أحوال الطقس", title: "الطقس حول العالم", loading: "نفحص الأحوال الجوية…", error: "الطقس غير متاح الآن.", retry: "إعادة المحاولة", updated: "آخر تحديث", feels: "يشعر بها", wind: "الرياح", humidity: "الرطوبة", hi: "العظمى", lo: "الصغرى", clear: "صافٍ", partly: "غائم جزئيًا", cloudy: "غائم", fog: "ضباب", drizzle: "رذاذ", rain: "مطر", showers: "زخات مطر", snow: "ثلوج", thunder: "عاصفة رعدية" },
+  fr: { eyebrow: "Aperçu mondial", title: "La météo dans le monde", loading: "Vérification des conditions…", error: "La météo est indisponible pour le moment.", retry: "Réessayer", updated: "Mis à jour", feels: "Ressenti", wind: "Vent", humidity: "Humidité", hi: "Max", lo: "Min", clear: "Ciel dégagé", partly: "Partiellement nuageux", cloudy: "Nuageux", fog: "Brouillard", drizzle: "Bruine", rain: "Pluie", showers: "Averses", snow: "Neige", thunder: "Orage" },
+  de: { eyebrow: "Globaler Überblick", title: "Wetter rund um die Welt", loading: "Wetter wird geprüft…", error: "Wetter ist derzeit nicht verfügbar.", retry: "Erneut versuchen", updated: "Aktualisiert", feels: "Gefühlt", wind: "Wind", humidity: "Luftfeuchtigkeit", hi: "Höchstwert", lo: "Tiefstwert", clear: "Klar", partly: "Teilweise bewölkt", cloudy: "Bewölkt", fog: "Nebel", drizzle: "Nieselregen", rain: "Regen", showers: "Schauer", snow: "Schnee", thunder: "Gewitter" },
+  es: { eyebrow: "Panorama global", title: "El tiempo en el mundo", loading: "Comprobando las condiciones…", error: "El tiempo no está disponible ahora.", retry: "Reintentar", updated: "Actualizado", feels: "Sensación térmica", wind: "Viento", humidity: "Humedad", hi: "Máx", lo: "Mín", clear: "Despejado", partly: "Parcialmente nublado", cloudy: "Nublado", fog: "Niebla", drizzle: "Llovizna", rain: "Lluvia", showers: "Chubascos", snow: "Nieve", thunder: "Tormenta" },
+  pt: { eyebrow: "Panorama global", title: "Clima ao redor do mundo", loading: "Verificando as condições…", error: "O clima não está disponível no momento.", retry: "Tentar novamente", updated: "Atualizado", feels: "Sensação térmica", wind: "Vento", humidity: "Umidade", hi: "Máx", lo: "Mín", clear: "Céu limpo", partly: "Parcialmente nublado", cloudy: "Nublado", fog: "Nevoeiro", drizzle: "Garoa", rain: "Chuva", showers: "Pancadas", snow: "Neve", thunder: "Tempestade" },
+  it: { eyebrow: "Panorama globale", title: "Il meteo nel mondo", loading: "Verifica delle condizioni…", error: "Il meteo non è disponibile al momento.", retry: "Riprova", updated: "Aggiornato", feels: "Percepita", wind: "Vento", humidity: "Umidità", hi: "Massima", lo: "Minima", clear: "Sereno", partly: "Parzialmente nuvoloso", cloudy: "Nuvoloso", fog: "Nebbia", drizzle: "Pioviggine", rain: "Pioggia", showers: "Rovesci", snow: "Neve", thunder: "Temporale" },
+  nl: { eyebrow: "Wereldwijd overzicht", title: "Weer over de hele wereld", loading: "Weercondities controleren…", error: "Weer is momenteel niet beschikbaar.", retry: "Opnieuw proberen", updated: "Bijgewerkt", feels: "Gevoelstemperatuur", wind: "Wind", humidity: "Luchtvochtigheid", hi: "Hoog", lo: "Laag", clear: "Helder", partly: "Half bewolkt", cloudy: "Bewolkt", fog: "Mist", drizzle: "Motregen", rain: "Regen", showers: "Buien", snow: "Sneeuw", thunder: "Onweer" },
+  ru: { eyebrow: "Обзор мира", title: "Погода по всему миру", loading: "Проверяем условия…", error: "Погода сейчас недоступна.", retry: "Повторить", updated: "Обновлено", feels: "Ощущается", wind: "Ветер", humidity: "Влажность", hi: "Макс", lo: "Мин", clear: "Ясно", partly: "Переменная облачность", cloudy: "Облачно", fog: "Туман", drizzle: "Морось", rain: "Дождь", showers: "Ливни", snow: "Снег", thunder: "Гроза" },
+  tr: { eyebrow: "Küresel görünüm", title: "Dünyada hava durumu", loading: "Koşullar kontrol ediliyor…", error: "Hava durumu şu anda kullanılamıyor.", retry: "Tekrar dene", updated: "Güncellendi", feels: "Hissedilen", wind: "Rüzgâr", humidity: "Nem", hi: "En yüksek", lo: "En düşük", clear: "Açık", partly: "Parçalı bulutlu", cloudy: "Bulutlu", fog: "Sis", drizzle: "Çisenti", rain: "Yağmur", showers: "Sağanak", snow: "Kar", thunder: "Gök gürültülü fırtına" },
+  fa: { eyebrow: "نمای کلی جهانی", title: "آب‌وهوای سراسر جهان", loading: "در حال بررسی شرایط…", error: "آب‌وهوا در حال حاضر در دسترس نیست.", retry: "تلاش دوباره", updated: "به‌روزرسانی شد", feels: "احساس می‌شود", wind: "باد", humidity: "رطوبت", hi: "حداکثر", lo: "حداقل", clear: "صاف", partly: "نیمه‌ابری", cloudy: "ابری", fog: "مه", drizzle: "باران ریز", rain: "باران", showers: "رگبار", snow: "برف", thunder: "طوفان تندری" },
+  ur: { eyebrow: "عالمی جائزہ", title: "دنیا بھر کا موسم", loading: "حالات جانچے جا رہے ہیں…", error: "موسم فی الحال دستیاب نہیں۔", retry: "دوبارہ کوشش کریں", updated: "اپ ڈیٹ شدہ", feels: "محسوس ہوتا ہے", wind: "ہوا", humidity: "نمی", hi: "زیادہ سے زیادہ", lo: "کم سے کم", clear: "صاف", partly: "جزوی ابر آلود", cloudy: "ابر آلود", fog: "دھند", drizzle: "بوندا باندی", rain: "بارش", showers: "موسلا دھار", snow: "برف", thunder: "طوفان" },
+  hi: { eyebrow: "वैश्विक परिदृश्य", title: "दुनिया भर का मौसम", loading: "स्थितियाँ जाँची जा रही हैं…", error: "मौसम अभी उपलब्ध नहीं है।", retry: "फिर कोशिश करें", updated: "अपडेटेड", feels: "महसूस होता है", wind: "हवा", humidity: "नमी", hi: "अधिकतम", lo: "न्यूनतम", clear: "साफ़", partly: "आंशिक बादल", cloudy: "बादल", fog: "कोहरा", drizzle: "बूंदाबांदी", rain: "बारिश", showers: "बौछारें", snow: "बर्फ़", thunder: "गरज के साथ तूफान" },
+  bn: { eyebrow: "বিশ্বব্যাপী চিত্র", title: "বিশ্বজুড়ে আবহাওয়া", loading: "পরিস্থিতি যাচাই করা হচ্ছে…", error: "আবহাওয়া এখন উপলব্ধ নয়।", retry: "আবার চেষ্টা করুন", updated: "আপডেট হয়েছে", feels: "অনুভূত হয়", wind: "বাতাস", humidity: "আর্দ্রতা", hi: "সর্বোচ্চ", lo: "সর্বনিম্ন", clear: "পরিষ্কার", partly: "আংশিক মেঘলা", cloudy: "মেঘলা", fog: "কুয়াশা", drizzle: "গুঁড়ি গুঁড়ি", rain: "বৃষ্টি", showers: "বৃষ্টিপাত", snow: "তুষার", thunder: "বজ্রঝড়" },
+  zh: { eyebrow: "全球概览", title: "世界各地的天气", loading: "正在检查天气状况…", error: "天气暂时不可用。", retry: "重试", updated: "已更新", feels: "体感温度", wind: "风", humidity: "湿度", hi: "最高", lo: "最低", clear: "晴", partly: "局部多云", cloudy: "多云", fog: "雾", drizzle: "毛毛雨", rain: "雨", showers: "阵雨", snow: "雪", thunder: "雷暴" },
+  "zh-TW": { eyebrow: "全球概覽", title: "世界各地的天氣", loading: "正在檢查天氣狀況…", error: "天氣暫時無法使用。", retry: "重試", updated: "已更新", feels: "體感溫度", wind: "風", humidity: "濕度", hi: "最高", lo: "最低", clear: "晴", partly: "局部多雲", cloudy: "多雲", fog: "霧", drizzle: "毛毛雨", rain: "雨", showers: "陣雨", snow: "雪", thunder: "雷暴" },
+  ja: { eyebrow: "世界の概観", title: "世界各地の天気", loading: "天候を確認しています…", error: "現在、天気情報は利用できません。", retry: "再試行", updated: "更新済み", feels: "体感温度", wind: "風", humidity: "湿度", hi: "最高", lo: "最低", clear: "晴れ", partly: "晴れ時々曇り", cloudy: "曇り", fog: "霧", drizzle: "霧雨", rain: "雨", showers: "にわか雨", snow: "雪", thunder: "雷雨" },
+  ko: { eyebrow: "세계 전망", title: "전 세계 날씨", loading: "기상 상황을 확인하는 중…", error: "현재 날씨 정보를 사용할 수 없습니다.", retry: "다시 시도", updated: "업데이트됨", feels: "체감 온도", wind: "바람", humidity: "습도", hi: "최고", lo: "최저", clear: "맑음", partly: "구름 조금", cloudy: "흐림", fog: "안개", drizzle: "이슬비", rain: "비", showers: "소나기", snow: "눈", thunder: "뇌우" },
+  id: { eyebrow: "Gambaran global", title: "Cuaca di seluruh dunia", loading: "Memeriksa kondisi…", error: "Cuaca tidak tersedia saat ini.", retry: "Coba lagi", updated: "Diperbarui", feels: "Terasa seperti", wind: "Angin", humidity: "Kelembapan", hi: "Tertinggi", lo: "Terendah", clear: "Cerah", partly: "Berawan sebagian", cloudy: "Berawan", fog: "Kabut", drizzle: "Gerimis", rain: "Hujan", showers: "Hujan lebat", snow: "Salju", thunder: "Badai petir" },
+  ms: { eyebrow: "Gambaran global", title: "Cuaca di seluruh dunia", loading: "Menyemak keadaan…", error: "Cuaca tidak tersedia buat masa ini.", retry: "Cuba lagi", updated: "Dikemas kini", feels: "Terasa seperti", wind: "Angin", humidity: "Kelembapan", hi: "Tertinggi", lo: "Terendah", clear: "Cerah", partly: "Sebahagian mendung", cloudy: "Mendung", fog: "Kabut", drizzle: "Gerimis", rain: "Hujan", showers: "Ribut hujan", snow: "Salji", thunder: "Ribut petir" },
+  vi: { eyebrow: "Tổng quan toàn cầu", title: "Thời tiết khắp thế giới", loading: "Đang kiểm tra điều kiện…", error: "Thời tiết hiện không khả dụng.", retry: "Thử lại", updated: "Đã cập nhật", feels: "Cảm giác như", wind: "Gió", humidity: "Độ ẩm", hi: "Cao nhất", lo: "Thấp nhất", clear: "Quang đãng", partly: "Có mây rải rác", cloudy: "Nhiều mây", fog: "Sương mù", drizzle: "Mưa phùn", rain: "Mưa", showers: "Mưa rào", snow: "Tuyết", thunder: "Dông" },
+  th: { eyebrow: "ภาพรวมทั่วโลก", title: "สภาพอากาศทั่วโลก", loading: "กำลังตรวจสอบสภาพอากาศ…", error: "ไม่สามารถใช้บริการสภาพอากาศได้ในขณะนี้", retry: "ลองอีกครั้ง", updated: "อัปเดตแล้ว", feels: "รู้สึกเหมือน", wind: "ลม", humidity: "ความชื้น", hi: "สูงสุด", lo: "ต่ำสุด", clear: "แจ่มใส", partly: "มีเมฆบางส่วน", cloudy: "มีเมฆมาก", fog: "หมอก", drizzle: "ฝนปรอย", rain: "ฝน", showers: "ฝนตกหนัก", snow: "หิมะ", thunder: "พายุฝนฟ้าคะนอง" },
+  sw: { eyebrow: "Muhtasari wa kimataifa", title: "Hali ya hewa duniani", loading: "Kuangalia hali…", error: "Hali ya hewa haipatikani sasa.", retry: "Jaribu tena", updated: "Imesasishwa", feels: "Inahisika kama", wind: "Upepo", humidity: "Unyevu", hi: "Kiwango cha juu", lo: "Kiwango cha chini", clear: "Anga safi", partly: "Mawingu kidogo", cloudy: "Mawingu", fog: "Ukungu", drizzle: "Manyunyu", rain: "Mvua", showers: "Mvua za mara kwa mara", snow: "Theluji", thunder: "Dhoruba" },
+  ha: { eyebrow: "Dubban duniya", title: "Yanayi a duniya", loading: "Ana duba yanayi…", error: "Yanayi ba ya samuwa a yanzu.", retry: "Sake gwadawa", updated: "An sabunta", feels: "Ana ji kamar", wind: "Iska", humidity: "Danshi", hi: "Mafi girma", lo: "Mafi ƙanƙanta", clear: "Sarari", partly: "Gajimare kaɗan", cloudy: "Gajimare", fog: "Hazo", drizzle: "Ruwa kaɗan", rain: "Ruwa", showers: "Ruwan kwankwasa", snow: "Kankara", thunder: "Guguwa" },
+  yo: { eyebrow: "Ìwòye àgbáyé", title: "Oju-ọjọ́ kárí ayé", loading: "Ò ń ṣàyẹ̀wò ipò…", error: "Oju-ọjọ́ kò sí ní àyè báyìí.", retry: "Gbìyànjú lẹ́ẹ̀kan síi", updated: "Imudojuiwọn", feels: "Ó rí bí", wind: "Afẹ́fẹ́", humidity: "Ọ̀rinrin", hi: "Títayọjù", lo: "Tí kéréjù", clear: "Kò sí àwọsánmọ", partly: "Àwọsánmọ díẹ̀", cloudy: "Kún fún àwọsánmọ", fog: "Kùkùrú", drizzle: "Òjò díẹ̀", rain: "Òjò", showers: "Ìrẹ́rẹ́ òjò", snow: "Yìnyín", thunder: "Àrá pẹ̀lú òjò" },
+  ig: { eyebrow: "Ochịchọ zuru ụwa", title: "Ihu igwe gburugburu ụwa", loading: "Na-enyocha ọnọdụ…", error: "Ihu igwe adịghị ugbu a.", retry: "Nwaa ọzọ", updated: "Emelite", feels: "Ọ dị ka", wind: "Ifufe", humidity: "Mmetọ mmiri", hi: "Kasị elu", lo: "Kasị ala", clear: "Igwe na-acha", partly: "Igwe ojii dị ntakịrị", cloudy: "Ojii", fog: "Igurube", drizzle: "Mmiri dị ntakịrị", rain: "Mmiri ozuzo", showers: "Mmiri ozuzo siri ike", snow: "Snow", thunder: "Égbè eluigwe" },
+  el: { eyebrow: "Παγκόσμια εικόνα", title: "Ο καιρός σε όλο τον κόσμο", loading: "Έλεγχος συνθηκών…", error: "Ο καιρός δεν είναι διαθέσιμος αυτή τη στιγμή.", retry: "Δοκιμάστε ξανά", updated: "Ενημερώθηκε", feels: "Αισθητή", wind: "Άνεμος", humidity: "Υγρασία", hi: "Μέγιστη", lo: "Ελάχιστη", clear: "Αίθριος", partly: "Λίγες νεφώσεις", cloudy: "Συννεφιά", fog: "Ομίχλη", drizzle: "Ψιχάλες", rain: "Βροχή", showers: "Μπόρες", snow: "Χιόνι", thunder: "Καταιγίδα" },
+  he: { eyebrow: "מבט גלובלי", title: "מזג האוויר ברחבי העולם", loading: "בודקים את התנאים…", error: "מזג האוויר אינו זמין כרגע.", retry: "נסו שוב", updated: "עודכן", feels: "מרגיש כמו", wind: "רוח", humidity: "לחות", hi: "מקסימום", lo: "מינימום", clear: "בהיר", partly: "מעונן חלקית", cloudy: "מעונן", fog: "ערפל", drizzle: "טפטוף", rain: "גשם", showers: "ממטרים", snow: "שלג", thunder: "סופת רעמים" },
+  pl: { eyebrow: "Globalny przegląd", title: "Pogoda na świecie", loading: "Sprawdzanie warunków…", error: "Pogoda jest teraz niedostępna.", retry: "Spróbuj ponownie", updated: "Zaktualizowano", feels: "Odczuwalna", wind: "Wiatr", humidity: "Wilgotność", hi: "Maks", lo: "Min", clear: "Bezchmurnie", partly: "Częściowe zachmurzenie", cloudy: "Pochmurno", fog: "Mgła", drizzle: "Mżawka", rain: "Deszcz", showers: "Przelotne opady", snow: "Śnieg", thunder: "Burza" },
+  ro: { eyebrow: "Privire globală", title: "Vremea în toată lumea", loading: "Verificăm condițiile…", error: "Vremea nu este disponibilă momentan.", retry: "Încearcă din nou", updated: "Actualizat", feels: "Resimțită", wind: "Vânt", humidity: "Umiditate", hi: "Maximă", lo: "Minimă", clear: "Senin", partly: "Parțial înnorat", cloudy: "Înnorat", fog: "Ceață", drizzle: "Burniță", rain: "Ploaie", showers: "Averse", snow: "Zăpadă", thunder: "Furtună" },
+};
+
+export const MARKETS: Record<Locale, MarketsDict> = {
+  en: { eyebrow: "Markets & Money", title: "Currencies & Markets", fxTitle: "Currency exchange", stocksTitle: "Global stocks & indices", loading: "Pulling live quotes…", error: "Markets are unreachable right now.", retry: "Try again", updated: "Updated", change: "Change" },
+  ar: { eyebrow: "الأسواق والمال", title: "العملات والأسواق", fxTitle: "سعر الصرف", stocksTitle: "الأسهم والمؤشرات العالمية", loading: "نجلب أحدث الأسعار…", error: "الأسواق غير متاحة الآن.", retry: "إعادة المحاولة", updated: "آخر تحديث", change: "التغير" },
+  fr: { eyebrow: "Marchés & Finance", title: "Devises et marchés", fxTitle: "Taux de change", stocksTitle: "Actions et indices mondiaux", loading: "Chargement des cotations…", error: "Les marchés sont inaccessibles pour le moment.", retry: "Réessayer", updated: "Mis à jour", change: "Variation" },
+  de: { eyebrow: "Märkte & Finanzen", title: "Währungen und Märkte", fxTitle: "Wechselkurs", stocksTitle: "Aktien und Indizes weltweit", loading: "Live-Kurse werden geladen…", error: "Märkte sind derzeit nicht erreichbar.", retry: "Erneut versuchen", updated: "Aktualisiert", change: "Veränderung" },
+  es: { eyebrow: "Mercados y finanzas", title: "Divisas y mercados", fxTitle: "Tipo de cambio", stocksTitle: "Acciones e índices globales", loading: "Cargando cotizaciones…", error: "Los mercados no están disponibles ahora.", retry: "Reintentar", updated: "Actualizado", change: "Cambio" },
+  pt: { eyebrow: "Mercados e finanças", title: "Moedas e mercados", fxTitle: "Câmbio", stocksTitle: "Ações e índices globais", loading: "Carregando cotações…", error: "Os mercados não estão disponíveis agora.", retry: "Tentar novamente", updated: "Atualizado", change: "Variação" },
+  it: { eyebrow: "Mercati e finanza", title: "Valute e mercati", fxTitle: "Cambio valuta", stocksTitle: "Azioni e indici globali", loading: "Caricamento quotazioni…", error: "I mercati non sono raggiungibili al momento.", retry: "Riprova", updated: "Aggiornato", change: "Variazione" },
+  nl: { eyebrow: "Markten & financiën", title: "Valuta en markten", fxTitle: "Wisselkoers", stocksTitle: "Aandelen en indices wereldwijd", loading: "Live koersen laden…", error: "Markten zijn momenteel niet bereikbaar.", retry: "Opnieuw proberen", updated: "Bijgewerkt", change: "Verandering" },
+  ru: { eyebrow: "Рынки и финансы", title: "Валюты и рынки", fxTitle: "Курс валют", stocksTitle: "Акции и индексы мира", loading: "Загружаем котировки…", error: "Рынки сейчас недоступны.", retry: "Повторить", updated: "Обновлено", change: "Изменение" },
+  tr: { eyebrow: "Piyasalar ve para", title: "Döviz ve piyasalar", fxTitle: "Döviz kuru", stocksTitle: "Küresel hisse ve endeksler", loading: "Canlı fiyatlar yükleniyor…", error: "Piyasalar şu anda ulaşılamıyor.", retry: "Tekrar dene", updated: "Güncellendi", change: "Değişim" },
+  fa: { eyebrow: "بازارها و پول", title: "ارز و بازارها", fxTitle: "نرخ ارز", stocksTitle: "سهام و شاخص‌های جهانی", loading: "در حال دریافت قیمت‌های زنده…", error: "بازارها در حال حاضر در دسترس نیستند.", retry: "تلاش دوباره", updated: "به‌روزرسانی شد", change: "تغییر" },
+  ur: { eyebrow: "مارکیٹس اور مالیات", title: "کرنسی اور مارکیٹس", fxTitle: "شرح مبادلہ", stocksTitle: "عالمی حصص اور اشاریے", loading: "لائیو قیمتیں لا رہے ہیں…", error: "مارکیٹس فی الحال دستیاب نہیں۔", retry: "دوبارہ کوشش کریں", updated: "اپ ڈیٹ شدہ", change: "تبدیلی" },
+  hi: { eyebrow: "बाज़ार और मुद्रा", title: "मुद्राएँ और बाज़ार", fxTitle: "विनिमय दर", stocksTitle: "वैश्विक शेयर और सूचकांक", loading: "लाइव भाव लाए जा रहे हैं…", error: "बाज़ार अभी उपलब्ध नहीं हैं।", retry: "फिर कोशिश करें", updated: "अपडेटेड", change: "परिवर्तन" },
+  bn: { eyebrow: "বাজার ও অর্থ", title: "মুদ্রা ও বাজার", fxTitle: "বিনিময় হার", stocksTitle: "বৈশ্বিক শেয়ার ও সূচক", loading: "লাইভ মূল্য আনা হচ্ছে…", error: "বাজার এখন উপলব্ধ নয়।", retry: "আবার চেষ্টা করুন", updated: "আপডেট হয়েছে", change: "পরিবর্তন" },
+  zh: { eyebrow: "市场与金融", title: "货币与市场", fxTitle: "汇率", stocksTitle: "全球股票与指数", loading: "正在加载实时行情…", error: "市场暂时无法访问。", retry: "重试", updated: "已更新", change: "变动" },
+  "zh-TW": { eyebrow: "市場與金融", title: "貨幣與市場", fxTitle: "匯率", stocksTitle: "全球股票與指數", loading: "正在載入即時行情…", error: "市場暫時無法訪問。", retry: "重試", updated: "已更新", change: "變動" },
+  ja: { eyebrow: "市場と金融", title: "通貨と市場", fxTitle: "為替レート", stocksTitle: "世界の株式と指数", loading: "リアルタイムの相場を読み込み中…", error: "現在、市場にアクセスできません。", retry: "再試行", updated: "更新済み", change: "変化" },
+  ko: { eyebrow: "시장과 금융", title: "환율과 시장", fxTitle: "환율", stocksTitle: "세계 주식 및 지수", loading: "실시간 시세 불러오는 중…", error: "현재 시장에 접속할 수 없습니다.", retry: "다시 시도", updated: "업데이트됨", change: "변동" },
+  id: { eyebrow: "Pasar dan keuangan", title: "Mata uang dan pasar", fxTitle: "Kurs mata uang", stocksTitle: "Saham dan indeks global", loading: "Memuat harga langsung…", error: "Pasar tidak dapat diakses saat ini.", retry: "Coba lagi", updated: "Diperbarui", change: "Perubahan" },
+  ms: { eyebrow: "Pasaran dan kewangan", title: "Mata wang dan pasaran", fxTitle: "Kadar tukaran", stocksTitle: "Saham dan indeks global", loading: "Memuatkan sebut harga langsung…", error: "Pasaran tidak dapat diakses buat masa ini.", retry: "Cuba lagi", updated: "Dikemas kini", change: "Perubahan" },
+  vi: { eyebrow: "Thị trường và tiền tệ", title: "Tiền tệ và thị trường", fxTitle: "Tỷ giá hối đoái", stocksTitle: "Cổ phiếu và chỉ số toàn cầu", loading: "Đang tải giá trực tiếp…", error: "Thị trường hiện không truy cập được.", retry: "Thử lại", updated: "Đã cập nhật", change: "Thay đổi" },
+  th: { eyebrow: "ตลาดและการเงิน", title: "สกุลเงินและตลาด", fxTitle: "อัตราแลกเปลี่ยน", stocksTitle: "หุ้นและดัชนีทั่วโลก", loading: "กำลังโหลดราคาล่าสุด…", error: "ไม่สามารถเข้าถึงตลาดได้ในขณะนี้", retry: "ลองอีกครั้ง", updated: "อัปเดตแล้ว", change: "การเปลี่ยนแปลง" },
+  sw: { eyebrow: "Masoko na fedha", title: "Sarafu na masoko", fxTitle: "Kiwango cha ubadilishaji", stocksTitle: "Hisa na fahirisi za dunia", loading: "Inapakia bei za moja kwa moja…", error: "Masoko hayapatikani sasa.", retry: "Jaribu tena", updated: "Imesasishwa", change: "Mabadiliko" },
+  ha: { eyebrow: "Kasuwanni da kuɗi", title: "Kudi da kasuwanni", fxTitle: "Farashin canji", stocksTitle: "Hannun jari da ma'auni na duniya", loading: "Ana loda farashin kai tsaye…", error: "Kasuwanni ba su samuwa a yanzu.", retry: "Sake gwadawa", updated: "An sabunta", change: "Canji" },
+  yo: { eyebrow: "Àwọn ọjà àti owó", title: "Ẹyọ owó àti àwọn ọjà", fxTitle: "Oṣuwọ́n pàṣípààrọ̀", stocksTitle: "Àwọn mọ́lẹ̀bí àti ìtọ́kasí àgbáyé", loading: "Ò ń gbé àwọn iye tààrà…", error: "Àwọn ọjà kò sí ní àyè báyìí.", retry: "Gbìyànjú lẹ́ẹ̀kan síi", updated: "Imudojuiwọn", change: "Ìyípadà" },
+  ig: { eyebrow: "Ahịa na ego", title: "Ego na ahịa", fxTitle: "Ọnụego mgbanwe", stocksTitle: "Mbata na ụlọ ọrụ zuru ụwa", loading: "Na-ebugo ọnụahịa dị ndụ…", error: "Ahịa adịghị ugbu a.", retry: "Nwaa ọzọ", updated: "Emelite", change: "Mgbanwe" },
+  el: { eyebrow: "Αγορές και χρήμα", title: "Νομίσματα και αγορές", fxTitle: "Συναλλαγματική ισοτιμία", stocksTitle: "Μετοχές και δείκτες παγκοσμίως", loading: "Φόρτωση τιμών…", error: "Οι αγορές δεν είναι διαθέσιμες αυτή τη στιγμή.", retry: "Δοκιμάστε ξανά", updated: "Ενημερώθηκε", change: "Μεταβολή" },
+  he: { eyebrow: "שווקים וכסף", title: "מטבעות ושווקים", fxTitle: "שער חליפין", stocksTitle: "מניות ומדדים עולמיים", loading: "טוענים שערים…", error: "השווקים אינם זמינים כרגע.", retry: "נסו שוב", updated: "עודכן", change: "שינוי" },
+  pl: { eyebrow: "Rynki i finanse", title: "Waluty i rynki", fxTitle: "Kurs wymiany", stocksTitle: "Akcje i indeksy światowe", loading: "Wczytywanie notowań…", error: "Rynki są teraz niedostępne.", retry: "Spróbuj ponownie", updated: "Zaktualizowano", change: "Zmiana" },
+  ro: { eyebrow: "Piețe și finanțe", title: "Valute și piețe", fxTitle: "Curs valutar", stocksTitle: "Acțiuni și indici globali", loading: "Se încarcă cotațiile…", error: "Piețele nu sunt accesibile momentan.", retry: "Încearcă din nou", updated: "Actualizat", change: "Modificare" },
+};
+
+export function getWeather(locale: string): WeatherDict {
+  return WEATHER[locale as Locale] ?? WEATHER[DEFAULT_LOCALE];
+}
+
+export function getMarkets(locale: string): MarketsDict {
+  return MARKETS[locale as Locale] ?? MARKETS[DEFAULT_LOCALE];
 }

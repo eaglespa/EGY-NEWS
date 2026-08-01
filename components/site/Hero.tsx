@@ -88,30 +88,45 @@ export function Hero({ lang, dict }: { lang: Locale; dict: Dict }) {
                 <TiltCard max={7}>
                   <Link
                     href={`/${lang}/article/${a.slug}`}
-                    className="glass group flex items-stretch gap-4 overflow-hidden rounded-2xl p-3 transition-colors hover:border-gold/50"
+                    className="glass group relative flex items-stretch gap-3 overflow-hidden rounded-2xl p-2.5 transition-all duration-300 hover:border-gold/60 hover:shadow-xl hover:shadow-black/30"
                   >
-                    <ArtImage
-                      seed={a.imageSeed}
-                      className="w-24 shrink-0 rounded-xl sm:w-28"
-                    />
-                    <div className="flex min-w-0 flex-col justify-center gap-1.5 py-1">
-                      <div className="flex items-center gap-2">
-                        <span className="font-mono text-[9px] tracking-[0.2em] text-gold uppercase">
+                    <span
+                      aria-hidden
+                      className="pointer-events-none absolute end-3 top-1/2 -translate-y-1/2 font-display text-[3.4rem] leading-none font-black text-white/[0.045] tabular-nums select-none"
+                    >
+                      {String(i + 1).padStart(2, "0")}
+                    </span>
+                    <ArtImage seed={a.imageSeed} className="w-28 shrink-0 self-stretch rounded-xl sm:w-32">
+                      <span className="absolute inset-0 rounded-xl ring-1 ring-white/10 ring-inset" />
+                    </ArtImage>
+                    <div className="relative flex min-w-0 flex-col justify-center gap-2 py-1.5">
+                      <div className="flex items-center gap-2.5">
+                        <span className="size-1 shrink-0 rounded-full bg-gold" aria-hidden />
+                        <span className="truncate font-mono text-[10px] font-semibold tracking-[0.22em] text-gold uppercase">
                           {dict.nav[a.category]}
                         </span>
                         {a.breaking && (
-                          <span className="rounded bg-alert px-1.5 py-0.5 font-mono text-[8px] font-black tracking-widest text-black uppercase">
+                          <span className="rounded-sm bg-alert px-1.5 py-0.5 font-mono text-[8px] font-black tracking-widest text-black uppercase">
                             {dict.ticker.breaking}
                           </span>
                         )}
                       </div>
-                      <p className="line-clamp-2 text-sm leading-snug font-semibold text-ink transition-colors group-hover:text-gold">
+                      <p className="line-clamp-2 text-[15px] leading-snug font-bold text-ink transition-colors group-hover:text-gold">
                         {a.title}
                       </p>
-                      <p className="font-mono text-[10px] text-ink3">
-                        {timeAgo(a.publishedAt, lang)}
-                      </p>
+                      <div className="flex items-center gap-2 font-mono text-[10px] tracking-wide text-ink3">
+                        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" aria-hidden>
+                          <circle cx="12" cy="12" r="9" />
+                          <path d="M12 7v5l3 2" />
+                        </svg>
+                        <span>{timeAgo(a.publishedAt, lang)}</span>
+                        <span className="text-gold/60">·</span>
+                        <span>
+                          {a.readTime} {dict.common.readTime}
+                        </span>
+                      </div>
                     </div>
+                    <span className="absolute inset-x-3 bottom-0 h-px bg-gradient-to-r from-transparent via-gold/50 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" aria-hidden />
                   </Link>
                 </TiltCard>
               </div>

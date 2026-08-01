@@ -15,7 +15,28 @@ const SOURCE_COLORS: Record<string, string> = {
   "cairo-desk": "#ecc878",
 };
 
-const DEFAULT_COLOR = "#a8b0bf";
+const PALETTE = [
+  "#d4a94e",
+  "#3ab6d9",
+  "#3ddc97",
+  "#ffb35c",
+  "#ff8c42",
+  "#c8a2ff",
+  "#ecc878",
+  "#8ab4ff",
+  "#f0c05a",
+  "#37b6d9",
+  "#7ee8c2",
+  "#ff7a59",
+];
+
+function sourceColor(name: string): string {
+  const key = name.toLowerCase();
+  if (SOURCE_COLORS[key]) return SOURCE_COLORS[key];
+  let h = 0;
+  for (let i = 0; i < key.length; i++) h = (h * 31 + key.charCodeAt(i)) >>> 0;
+  return PALETTE[h % PALETTE.length];
+}
 
 async function requestWire(lang: string): Promise<WireFeedResponse> {
   const res = await fetch(`/api/news?lang=${encodeURIComponent(lang)}`, {
@@ -199,7 +220,7 @@ export function LiveWire({ lang, labels }: { lang: string; labels: WireDict }) {
       {!error && filtered.length > 0 && (
         <ul className="grid gap-3">
           {filtered.slice(0, 12).map((item) => {
-            const color = SOURCE_COLORS[item.source.toLowerCase()] ?? DEFAULT_COLOR;
+            const color = sourceColor(item.source);
             return (
               <li key={item.id}>
                 <a
