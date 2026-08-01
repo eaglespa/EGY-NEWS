@@ -4,6 +4,8 @@ import { useEffect, useMemo, useState } from "react";
 import type { WireDict } from "@/lib/i18n-wire";
 import type { WireItem, WireFeedResponse } from "@/lib/wire";
 
+const REFRESH_MS = 10 * 60_000;
+
 const SOURCE_COLORS: Record<string, string> = {
   axios: "#d4a94e",
   reuters: "#ffb35c",
@@ -53,7 +55,6 @@ export function LiveWire({ lang, labels }: { lang: string; labels: WireDict }) {
   const [loading, setLoading] = useState(true);
   const [updatedAt, setUpdatedAt] = useState<string | null>(null);
   const [filter, setFilter] = useState("");
-  const [tick, setTick] = useState(0);
 
   useEffect(() => {
     let ignore = false;
@@ -64,33 +65,7 @@ export function LiveWire({ lang, labels }: { lang: string; labels: WireDict }) {
         setItems(data.items);
         setSources(data.sources);
         setUpdatedAt(data.fetchedAt);
-      } catch {
-        if (!ignore) {
-          setError(true);
-          setItems(null);
-        }
-      } finally {
-        if (!ignore) setLoading(false);
-      }
-    }
-    void run();
-    const timer = setInterval(() => setTick((t) => t + 1), 60_000);
-    return () => {
-      ignore = true;
-      clearInterval(timer);
-    };
-  }, [lang]);
-
-  useEffect(() => {
-    if (tick <= 0 || tick % 5 !== 0) return;
-    let ignore = false;
-    async function run() {
-      try {
-        const data = await requestWire(lang);
-        if (ignore) return;
-        setItems(data.items);
-        setSources(data.sources);
-        setUpdatedAt(data.fetchedAt);
+        setError(false);
       } catch {
         if (!ignore) setError(true);
       } finally {
@@ -98,10 +73,12 @@ export function LiveWire({ lang, labels }: { lang: string; labels: WireDict }) {
       }
     }
     void run();
+    const timer = setInterval(() => void run(), REFRESH_MS);
     return () => {
       ignore = true;
+      clearInterval(timer);
     };
-  }, [tick, lang]);
+  }, [lang]);
 
   async function refresh() {
     setLoading(true);
