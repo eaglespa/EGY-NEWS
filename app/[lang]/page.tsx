@@ -13,6 +13,7 @@ import { AdBanner } from "@/components/site/AdBanner";
 import { AgentChat } from "@/components/site/AgentChat";
 import { LiveWire } from "@/components/site/LiveWire";
 import { WeatherSection } from "@/components/site/WeatherSection";
+import { WeatherStrip } from "@/components/site/WeatherStrip";
 import { MarketsSection } from "@/components/site/MarketsSection";
 import { getWeather, getMarkets } from "@/lib/i18n-wire";
 import Link from "next/link";
@@ -84,6 +85,7 @@ export default async function HomePage({
     <div className="relative">
       <Orbs />
       <div className="relative z-10">
+        <WeatherStrip labels={getWeather(lang)} />
         <Hero lang={locale} dict={dict} />
         {breaking.length > 0 && <BreakingTicker lang={locale} />}
 
