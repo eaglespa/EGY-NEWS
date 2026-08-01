@@ -238,6 +238,30 @@ function matchesQuery(item: WireItem, q: string): boolean {
   return q.split(/\s+/).every((term) => haystack.includes(term));
 }
 
+export async function searchNews(opts: { q?: string } = {}): Promise<WireItem[]> {
+  const q = opts.q?.trim() ?? "";
+  if (!q) return [];
+  const ar = /[\u0600-\u06FF]/.test(q);
+  const source: FeedSource = {
+    id: "google-search",
+    name: "Google News",
+    site: "https://news.google.com",
+    kind: "google",
+    url: googleNewsUrl(q, ar ? "ar" : "en-US", ar ? "EG" : "US", ar ? "EG:ar" : "US:en"),
+    lang: ar ? "ar" : "en",
+  };
+  const items = await fetchFeed(source);
+  const seen = new Set<string>();
+  const unique: WireItem[] = [];
+  for (const item of items) {
+    const key = item.title.toLowerCase().slice(0, 140);
+    if (seen.has(key)) continue;
+    seen.add(key);
+    unique.push(item);
+  }
+  return unique.slice(0, 8);
+}
+
 export async function fetchWireSources(
   opts: { q?: string } = {},
 ): Promise<WireFeedResponse> {

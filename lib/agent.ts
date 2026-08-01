@@ -82,6 +82,13 @@ function listTitles(items: AgentIndexItem[]): string {
   return items.map((a, i) => `${i + 1}. ${a.title}`).join("\n");
 }
 
+export function webIntro(rawQuery: string): string {
+  const ar = hasArabic(rawQuery);
+  return ar
+    ? `لم أجد هذا الموضوع في أرشيفنا، لذا بحثت لك في الأخبار الحية على الإنترنت عن «${rawQuery.trim()}»:\n`
+    : `That topic isn't in our archive, so I searched the live web for news about "${rawQuery.trim()}":\n`;
+}
+
 export function askAgent(rawQuery: string, items: AgentIndexItem[]): AgentReply {
   const q = rawQuery.trim();
   const ar = hasArabic(q);

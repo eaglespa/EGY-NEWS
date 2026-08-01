@@ -3,7 +3,8 @@
 import { useEffect, useRef, useState, type FormEvent } from "react";
 import Link from "next/link";
 import { AGENT_INDEX, type AgentIndexItem } from "@/lib/db";
-import { askAgent } from "@/lib/agent";
+import { askAgent, webIntro } from "@/lib/agent";
+import type { WireItem } from "@/lib/wire";
 import type { Dict } from "@/lib/i18n";
 import type { Locale } from "@/lib/locales";
 
@@ -11,10 +12,22 @@ interface Msg {
   role: "user" | "agent";
   text: string;
   articles?: AgentIndexItem[];
+  external?: WireItem[];
 }
 
 function typingDelay() {
   return 480 + Math.random() * 420;
+}
+
+async function fetchWeb(q: string): Promise<WireItem[]> {
+  try {
+    const res = await fetch(`/api/agent/search?q=${encodeURIComponent(q)}`);
+    if (!res.ok) return [];
+    const data = (await res.json()) as { items: WireItem[] };
+    return data.items ?? [];
+  } catch {
+    return [];
+  }
 }
 
 export function AgentChat({ lang, dict }: { lang: Locale; dict: Dict }) {
@@ -31,17 +44,28 @@ export function AgentChat({ lang, dict }: { lang: Locale; dict: Dict }) {
     if (el) el.scrollTop = el.scrollHeight;
   }, [messages, busy, open]);
 
-  function send(q: string) {
+  async function send(q: string) {
     const text = q.trim();
     if (!text || busy) return;
     setMessages((m) => [...m, { role: "user", text }]);
     setInput("");
     setBusy(true);
-    setTimeout(() => {
-      const reply = askAgent(text, AGENT_INDEX);
+    await new Promise((r) => setTimeout(r, typingDelay()));
+    const reply = askAgent(text, AGENT_INDEX);
+    if (reply.intent === "unknown") {
+      const external = await fetchWeb(text);
+      if (external.length) {
+        setMessages((m) => [
+          ...m,
+          { role: "agent", text: webIntro(text), external },
+        ]);
+      } else {
+        setMessages((m) => [...m, { role: "agent", text: reply.text }]);
+      }
+    } else {
       setMessages((m) => [...m, { role: "agent", text: reply.text, articles: reply.articles }]);
-      setBusy(false);
-    }, typingDelay());
+    }
+    setBusy(false);
   }
 
   function onSubmit(e: FormEvent) {
@@ -107,6 +131,31 @@ export function AgentChat({ lang, dict }: { lang: Locale; dict: Dict }) {
                           </p>
                           <p className="mt-1 font-mono text-[9px] text-ink3">{d.readArticle} →</p>
                         </Link>
+                      ))}
+                    </div>
+                  )}
+                  {m.external && m.external.length > 0 && (
+                    <div className="mt-3 space-y-2">
+                      {m.external.map((w) => (
+                        <a
+                          key={w.id}
+                          href={w.link}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="group block rounded-xl border border-line bg-bg/60 p-3 transition-colors hover:border-gold/50"
+                        >
+                          <div className="flex items-center gap-2">
+                            <span className="truncate font-mono text-[9px] tracking-widest text-gold uppercase">
+                              {w.source}
+                            </span>
+                          </div>
+                          <p className="mt-1 text-[12px] leading-snug font-semibold text-ink group-hover:text-gold">
+                            {w.title}
+                          </p>
+                          <p className="mt-1 font-mono text-[9px] text-ink3">
+                            {d.readArticle} ↗
+                          </p>
+                        </a>
                       ))}
                     </div>
                   )}
