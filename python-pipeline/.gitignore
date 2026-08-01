@@ -1,0 +1,19 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# Runtime state
+output/
+
+# Keys & secrets
+.env
+config/youtube_oauth.json
+config/youtube_token.json
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/

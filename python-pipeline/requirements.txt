@@ -1,0 +1,18 @@
+requests>=2.31.0
+feedparser>=6.0.10
+anthropic>=0.40.0
+python-dotenv>=1.0.0
+
+# voice / video
+imageio-ffmpeg>=0.5.1
+Pillow>=10.0.0
+
+# approval dashboard
+flask>=3.0.0
+
+# publish (optional runtime deps)
+# google-api-python-client>=2.100.0
+# google-auth-oauthlib>=1.2.0
+# google-auth-httplib2>=0.2.0
+# oauthlib>=3.2.0
+# requests-toolbelt>=1.0.0
