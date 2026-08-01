@@ -69,7 +69,7 @@ export function Hero({ lang, dict }: { lang: Locale; dict: Dict }) {
           </div>
         </div>
 
-        <div className="relative z-10 flex min-h-[420px] flex-col justify-center gap-4 lg:min-h-[520px] lg:gap-5 lg:ps-10">
+        <div className="relative z-10 flex min-h-[420px] flex-col justify-center gap-6 lg:min-h-[520px] lg:gap-8 lg:ps-10">
           <div aria-hidden className="absolute -top-16 end-0 size-64 rounded-full border border-gold/20 animate-spin-slow" />
           <div aria-hidden className="absolute -top-10 end-10 size-44 rounded-full border border-nile/20 animate-spin-slow" style={{ animationDirection: "reverse", animationDuration: "34s" }} />
           <div aria-hidden className="absolute bottom-4 start-4 size-24 rounded-full bg-gold/10 blur-2xl animate-orb" />
