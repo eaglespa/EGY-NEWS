@@ -12,7 +12,6 @@ import { SectionHeading } from "@/components/site/SectionHeading";
 import { AdBanner } from "@/components/site/AdBanner";
 import { AgentChat } from "@/components/site/AgentChat";
 import { LiveWire } from "@/components/site/LiveWire";
-import { WeatherSection } from "@/components/site/WeatherSection";
 import { WeatherStrip } from "@/components/site/WeatherStrip";
 import { MarketsSection } from "@/components/site/MarketsSection";
 import { getWeather, getMarkets } from "@/lib/i18n-wire";
@@ -149,12 +148,6 @@ export default async function HomePage({
         <section className="border-t border-line bg-bg2/40">
           <div className="container-x py-14">
             <LiveWire lang={locale} labels={dict.wire} />
-          </div>
-        </section>
-
-        <section className="border-t border-line">
-          <div className="container-x py-14">
-            <WeatherSection labels={getWeather(lang)} />
           </div>
         </section>
 
