@@ -16,10 +16,10 @@ export async function generateMetadata({
   const { lang } = await params;
   const dict = getDict(lang);
   return {
-    title: `${dict.wire.title} — ${SITE.brand}`,
+    title: dict.wire.title,
     description: dict.wire.eyebrow,
     alternates: { canonical: `${SITE.domain}/${lang}/live` },
-    openGraph: { title: `${dict.wire.title} — ${SITE.brand}`, description: dict.wire.eyebrow, url: `${SITE.domain}/${lang}/live` },
+    openGraph: { title: dict.wire.title, description: dict.wire.eyebrow, url: `${SITE.domain}/${lang}/live` },
   };
 }
 

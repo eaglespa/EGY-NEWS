@@ -14,6 +14,7 @@ import { AgentChat } from "@/components/site/AgentChat";
 import { LiveWire } from "@/components/site/LiveWire";
 import { WeatherStrip } from "@/components/site/WeatherStrip";
 import { MarketsSection } from "@/components/site/MarketsSection";
+import { Reveal } from "@/components/ui/Reveal";
 import { getWeather, getMarkets } from "@/lib/i18n-wire";
 import Link from "next/link";
 
@@ -88,55 +89,65 @@ export default async function HomePage({
         <Hero lang={locale} dict={dict} />
         {breaking.length > 0 && <BreakingTicker lang={locale} />}
 
-        <section className="container-x py-14">
-          <SectionHeading eyebrow={dict.hero.latest} title={dict.common.latest} linkHref={`/${lang}/search`} linkLabel={dict.actions.viewAll} />
+        <section id="latest" className="container-x scroll-mt-24 py-14">
+          <Reveal>
+            <SectionHeading eyebrow={dict.hero.latest} title={dict.common.latest} linkHref={`/${lang}/search`} linkLabel={dict.actions.viewAll} index="01" />
+          </Reveal>
           <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
             {latest.map((a, i) => (
-              <NewsCard key={a.id} article={a} lang={locale} className={i === 0 ? "sm:col-span-2 lg:col-span-2" : ""} />
+              <Reveal key={a.id} delay={(i % 3) * 90} className={i === 0 ? "sm:col-span-2 lg:col-span-2" : ""}>
+                <NewsCard article={a} lang={locale} />
+              </Reveal>
             ))}
           </div>
         </section>
 
         <section className="border-y border-line bg-bg2/40">
           <div className="container-x py-14">
-            <SectionHeading eyebrow={dict.ticker.breaking} title={dict.common.topStories} />
+            <Reveal>
+              <SectionHeading eyebrow={dict.ticker.breaking} title={dict.common.topStories} index="02" />
+            </Reveal>
             <div className="grid gap-4 lg:grid-cols-2">
               {top.map((a, i) => (
-                <Link
-                  key={a.id}
-                  href={`/${lang}/article/${a.slug}`}
-                  className="group glass flex items-center gap-5 rounded-2xl p-4 transition-colors hover:border-gold/50"
-                >
-                  <span className="font-display text-4xl font-black gold-text-static">{String(i + 1).padStart(2, "0")}</span>
-                  <div className="min-w-0">
-                    <div className="mb-1 flex items-center gap-2 font-mono text-[10px] tracking-widest text-ink3 uppercase">
-                      <span className="text-gold">{dict.nav[a.category]}</span>
-                      {a.breaking && <span className="text-alert">{dict.ticker.breaking}</span>}
+                <Reveal key={a.id} delay={(i % 2) * 90}>
+                  <Link
+                    href={`/${lang}/article/${a.slug}`}
+                    className="group glass flex items-center gap-5 rounded-2xl p-4 transition-colors hover:border-gold/50"
+                  >
+                    <span className="font-display text-4xl font-black gold-text-static">{String(i + 1).padStart(2, "0")}</span>
+                    <div className="min-w-0">
+                      <div className="mb-1 flex items-center gap-2 font-mono text-[10px] tracking-widest text-ink3 uppercase">
+                        <span className="text-gold">{dict.nav[a.category]}</span>
+                        {a.breaking && <span className="text-alert">{dict.ticker.breaking}</span>}
+                      </div>
+                      <h3 className="line-clamp-2 font-display text-lg leading-snug font-semibold text-ink transition-colors group-hover:text-gold">
+                        {a.title}
+                      </h3>
                     </div>
-                    <h3 className="line-clamp-2 font-display text-lg leading-snug font-semibold text-ink transition-colors group-hover:text-gold">
-                      {a.title}
-                    </h3>
-                  </div>
-                </Link>
+                  </Link>
+                </Reveal>
               ))}
             </div>
           </div>
         </section>
 
         <section className="container-x py-14">
-          <SectionHeading eyebrow={SITE.brand} title={dict.common.categories} />
+          <Reveal>
+            <SectionHeading eyebrow={SITE.brand} title={dict.common.categories} index="03" />
+          </Reveal>
           <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-7">
             {CATEGORIES.map((c, i) => (
-              <Link
-                key={c}
-                href={`/${lang}/category/${c}`}
-                className="group relative overflow-hidden rounded-2xl border border-line bg-panel p-5 text-center transition-all hover:border-gold/50 hover:bg-gold/5"
-              >
-                <span className="font-mono text-[10px] text-ink3">0{i + 1}</span>
-                <p className="mt-3 font-display text-base font-bold text-ink transition-colors group-hover:text-gold">
-                  {dict.nav[c]}
-                </p>
-              </Link>
+              <Reveal key={c} delay={i * 50}>
+                <Link
+                  href={`/${lang}/category/${c}`}
+                  className="group relative overflow-hidden rounded-2xl border border-line bg-panel p-5 text-center transition-all hover:border-gold/50 hover:bg-gold/5"
+                >
+                  <span className="font-mono text-[10px] text-ink3">0{i + 1}</span>
+                  <p className="mt-3 font-display text-base font-bold text-ink transition-colors group-hover:text-gold">
+                    {dict.nav[c]}
+                  </p>
+                </Link>
+              </Reveal>
             ))}
           </div>
         </section>

@@ -7,7 +7,7 @@ import { SITE } from "@/lib/site";
 export function Hreflang() {
   const pathname = usePathname();
 
-  const rest = pathname.replace(/^\/[a-z]{2}(-[A-Za-z]{2})?/, "");
+  const rest = pathname.replace(/^\/[a-z]{2}(-[a-z]{2})?/i, "");
 
   return (
     <>

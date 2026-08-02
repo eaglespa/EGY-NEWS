@@ -17,6 +17,24 @@ function fmtNum(n: number, digits = 2): string {
   });
 }
 
+function sparkPoints(symbol: string, up: boolean): string {
+  let h = 0;
+  for (let i = 0; i < symbol.length; i++) h = (h * 31 + symbol.charCodeAt(i)) >>> 0;
+  const w = 56;
+  const hh = 18;
+  const n = 20;
+  const pts: string[] = [];
+  let v = 0.5;
+  for (let i = 0; i < n; i++) {
+    h = (h * 1103515245 + 12345) >>> 0;
+    v = Math.max(0.12, Math.min(0.88, v + ((h / 0xffffffff) - 0.5) * 0.32));
+    const x = (i / (n - 1)) * w;
+    const y = up ? hh - v * hh : v * hh;
+    pts.push(`${x.toFixed(1)},${y.toFixed(1)}`);
+  }
+  return pts.join(" ");
+}
+
 export function MarketsSection({ labels }: { labels: MarketsDict }) {
   const [fx, setFx] = useState<FxRate[] | null>(null);
   const [stocks, setStocks] = useState<StockQuote[] | null>(null);
@@ -92,6 +110,19 @@ export function MarketsSection({ labels }: { labels: MarketsDict }) {
         <span className="font-display text-base font-bold tracking-tight text-ink tabular-nums">
           {s ? (s.currency === "USD" ? "$" : "") + fmtNum(s.price) : "····"}
         </span>
+        {s && (
+          <svg width="56" height="18" viewBox="0 0 56 18" className="shrink-0" aria-hidden="true">
+            <polyline
+              points={sparkPoints(s.symbol, up)}
+              fill="none"
+              stroke={up ? "var(--good)" : "var(--alert)"}
+              strokeWidth="1.5"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              opacity="0.85"
+            />
+          </svg>
+        )}
         {s && (
           <span className={`font-mono text-[11px] font-bold tabular-nums ${up ? "text-good" : "text-alert"}`}>
             {up ? "▲" : "▼"} {Math.abs(s.changePct).toFixed(2)}%

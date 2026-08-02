@@ -14,7 +14,7 @@ export async function generateMetadata({
   const { lang } = await params;
   const dict = getDict(lang);
   return {
-    title: `${dict.nav.advertise} — ${SITE.brand}`,
+    title: dict.nav.advertise,
     description: dict.advertise.subtitle,
     alternates: { canonical: `${SITE.domain}/${lang}/advertise` },
   };

@@ -30,6 +30,7 @@ export function LocaleSwitcher({ current }: { current: string }) {
   const switchTo = useCallback(
     (code: string) => {
       setOpen(false);
+      document.cookie = `lang=${code}; path=/; max-age=${60 * 60 * 24 * 365}; samesite=lax`;
       const rest = pathname.replace(/^\/[^/]+/, "");
       router.push(`/${code}${rest}`);
     },

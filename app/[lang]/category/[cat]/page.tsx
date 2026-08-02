@@ -21,12 +21,12 @@ export async function generateMetadata({
   if (!CATEGORIES.includes(cat as never)) return {};
   const dict = getDict(lang);
   const name = dict.nav[cat as keyof typeof dict.nav];
-  const title = `${name} — ${SITE.brand}`;
+  const title = name;
   const url = `${SITE.domain}/${lang}/category/${cat}`;
 
   return {
     title,
-    description: `${dict.meta.title} · ${name} (${lang})`,
+    description: `${dict.meta.title} · ${name}`,
     alternates: { canonical: url },
     openGraph: { title, description: name, url, siteName: SITE.brand, locale: lang },
   };

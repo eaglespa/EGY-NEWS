@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import type { WireDict } from "@/lib/i18n-wire";
 import type { WireItem, WireFeedResponse } from "@/lib/wire";
 
@@ -55,6 +55,15 @@ export function LiveWire({ lang, labels }: { lang: string; labels: WireDict }) {
   const [loading, setLoading] = useState(true);
   const [updatedAt, setUpdatedAt] = useState<string | null>(null);
   const [filter, setFilter] = useState("");
+  const [toast, setToast] = useState(false);
+  const toastTimer = useRef<number | null>(null);
+  const loaded = useRef(false);
+
+  function showToast() {
+    setToast(true);
+    if (toastTimer.current) window.clearTimeout(toastTimer.current);
+    toastTimer.current = window.setTimeout(() => setToast(false), 2600);
+  }
 
   useEffect(() => {
     let ignore = false;
@@ -66,6 +75,8 @@ export function LiveWire({ lang, labels }: { lang: string; labels: WireDict }) {
         setSources(data.sources);
         setUpdatedAt(data.fetchedAt);
         setError(false);
+        if (loaded.current) showToast();
+        loaded.current = true;
       } catch {
         if (!ignore) setError(true);
       } finally {
@@ -77,6 +88,7 @@ export function LiveWire({ lang, labels }: { lang: string; labels: WireDict }) {
     return () => {
       ignore = true;
       clearInterval(timer);
+      if (toastTimer.current) window.clearTimeout(toastTimer.current);
     };
   }, [lang]);
 
@@ -88,6 +100,7 @@ export function LiveWire({ lang, labels }: { lang: string; labels: WireDict }) {
       setItems(data.items);
       setSources(data.sources);
       setUpdatedAt(data.fetchedAt);
+      showToast();
     } catch {
       setError(true);
       setItems(null);
@@ -168,8 +181,8 @@ export function LiveWire({ lang, labels }: { lang: string; labels: WireDict }) {
         <div className="space-y-3" aria-hidden>
           {Array.from({ length: 6 }).map((_, i) => (
             <div key={i} className="flex items-center gap-4 rounded-2xl border border-line bg-panel p-4">
-              <div className="h-3 w-16 animate-pulse rounded bg-panel2" />
-              <div className="h-4 flex-1 animate-pulse rounded bg-panel2" />
+              <div className="skeleton h-5 w-24 shrink-0 rounded-full" />
+              <div className="skeleton h-4 flex-1 rounded" />
             </div>
           ))}
         </div>
@@ -195,7 +208,7 @@ export function LiveWire({ lang, labels }: { lang: string; labels: WireDict }) {
       )}
 
       {!error && filtered.length > 0 && (
-        <ul className="grid gap-3">
+        <ul className="grid gap-3" aria-live="polite">
           {filtered.slice(0, 12).map((item) => {
             const color = sourceColor(item.source);
             return (
@@ -243,6 +256,16 @@ export function LiveWire({ lang, labels }: { lang: string; labels: WireDict }) {
               {s.name}
             </span>
           ))}
+        </div>
+      )}
+
+      {toast && (
+        <div
+          role="status"
+          aria-live="polite"
+          className="animate-toast-in fixed bottom-6 left-1/2 z-[70] -translate-x-1/2 whitespace-nowrap rounded-full border border-gold/40 bg-bg/90 px-5 py-2.5 font-mono text-[11px] tracking-widest text-gold uppercase shadow-xl shadow-black/20 backdrop-blur-xl"
+        >
+          {labels.updated} ✓
         </div>
       )}
     </div>

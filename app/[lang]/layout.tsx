@@ -2,7 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Fraunces, Cairo, JetBrains_Mono } from "next/font/google";
 import { notFound } from "next/navigation";
 import "../globals.css";
-import { LOCALES, LOCALE_CODES, getLocale, isLocale, type Locale } from "@/lib/locales";
+import { LOCALES, getLocale, isLocale, type Locale } from "@/lib/locales";
 import { getDict } from "@/lib/i18n";
 import { SITE } from "@/lib/site";
 import { Header } from "@/components/site/Header";
@@ -47,13 +47,6 @@ export async function generateMetadata({
   const { lang } = await params;
   const dict = getDict(lang);
 
-  const languages: Record<string, string> = {
-    "x-default": `${SITE.domain}/en`,
-  };
-  for (const l of LOCALE_CODES) {
-    languages[l] = `${SITE.domain}/${l}`;
-  }
-
   return {
     metadataBase: new URL(SITE.domain),
     title: {
@@ -67,7 +60,6 @@ export async function generateMetadata({
     publisher: SITE.studio,
     alternates: {
       canonical: `${SITE.domain}/${lang}`,
-      languages,
     },
     openGraph: {
       type: "website",

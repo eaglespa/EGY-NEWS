@@ -125,6 +125,59 @@ const parser = new XMLParser({
   cdataPropName: "#cdata",
 });
 
+const LOCALE_FEEDS: Record<string, { hl: string; gl: string; ceid: string; lang: string }> = {
+  fr: { hl: "fr", gl: "FR", ceid: "FR:fr", lang: "fr" },
+  de: { hl: "de", gl: "DE", ceid: "DE:de", lang: "de" },
+  es: { hl: "es", gl: "ES", ceid: "ES:es", lang: "es" },
+  pt: { hl: "pt-BR", gl: "BR", ceid: "BR:pt", lang: "pt" },
+  it: { hl: "it", gl: "IT", ceid: "IT:it", lang: "it" },
+  nl: { hl: "nl", gl: "NL", ceid: "NL:nl", lang: "nl" },
+  ru: { hl: "ru", gl: "RU", ceid: "RU:ru", lang: "ru" },
+  tr: { hl: "tr", gl: "TR", ceid: "TR:tr", lang: "tr" },
+  fa: { hl: "fa", gl: "IR", ceid: "IR:fa", lang: "fa" },
+  ur: { hl: "ur", gl: "PK", ceid: "PK:ur", lang: "ur" },
+  hi: { hl: "hi", gl: "IN", ceid: "IN:hi", lang: "hi" },
+  bn: { hl: "bn", gl: "BD", ceid: "BD:bn", lang: "bn" },
+  zh: { hl: "zh-CN", gl: "CN", ceid: "CN:zh-Hans", lang: "zh" },
+  "zh-TW": { hl: "zh-TW", gl: "TW", ceid: "TW:zh-Hant", lang: "zh-TW" },
+  ja: { hl: "ja", gl: "JP", ceid: "JP:ja", lang: "ja" },
+  ko: { hl: "ko", gl: "KR", ceid: "KR:ko", lang: "ko" },
+  id: { hl: "id", gl: "ID", ceid: "ID:id", lang: "id" },
+  ms: { hl: "ms", gl: "MY", ceid: "MY:ms", lang: "ms" },
+  vi: { hl: "vi", gl: "VN", ceid: "VN:vi", lang: "vi" },
+  th: { hl: "th", gl: "TH", ceid: "TH:th", lang: "th" },
+  sw: { hl: "sw", gl: "KE", ceid: "KE:sw", lang: "sw" },
+  ha: { hl: "ha", gl: "NG", ceid: "NG:ha", lang: "ha" },
+  yo: { hl: "yo", gl: "NG", ceid: "NG:yo", lang: "yo" },
+  ig: { hl: "ig", gl: "NG", ceid: "NG:ig", lang: "ig" },
+  el: { hl: "el", gl: "GR", ceid: "GR:el", lang: "el" },
+  he: { hl: "he", gl: "IL", ceid: "IL:he", lang: "he" },
+  pl: { hl: "pl", gl: "PL", ceid: "PL:pl", lang: "pl" },
+  ro: { hl: "ro", gl: "RO", ceid: "RO:ro", lang: "ro" },
+};
+
+function wireSourcesFor(lang?: string): FeedSource[] {
+  const key = (lang ?? "").toLowerCase();
+  if (!key) return WIRE_SOURCES;
+  if (key === "ar") return WIRE_SOURCES.filter((s) => s.lang === "ar");
+  if (key === "en") return WIRE_SOURCES.filter((s) => s.lang === "en");
+  const feed = LOCALE_FEEDS[key];
+  const localeSource = feed
+    ? [
+        src(
+          `google-${key}`,
+          "Google News",
+          "https://news.google.com",
+          "google",
+          googleNewsUrl("", feed.hl, feed.gl, feed.ceid),
+          feed.lang,
+        ),
+      ]
+    : [];
+  // Fall back to English sources so the wire is never empty for niche locales
+  return [...localeSource, ...WIRE_SOURCES.filter((s) => s.lang === "en")];
+}
+
 function stripHtml(input: string): string {
   return input
     .replace(/<[^>]*>/g, " ")
@@ -263,10 +316,12 @@ export async function searchNews(opts: { q?: string } = {}): Promise<WireItem[]>
 }
 
 export async function fetchWireSources(
-  opts: { q?: string } = {},
+  opts: { q?: string; lang?: string } = {},
 ): Promise<WireFeedResponse> {
   const q = opts.q?.trim().toLowerCase() ?? "";
-  const results = await mapLimit(WIRE_SOURCES, 6, (s) => fetchFeed(s));
+  const lang = opts.lang?.trim().toLowerCase() ?? "";
+  const sources = wireSourcesFor(lang);
+  const results = await mapLimit(sources, 6, (s) => fetchFeed(s));
   const seen = new Set<string>();
   const items: WireItem[] = [];
 
@@ -276,6 +331,10 @@ export async function fetchWireSources(
       if (seen.has(key)) continue;
       seen.add(key);
       if (q && !matchesQuery(item, q)) continue;
+      if (lang === "ar" && item.lang !== "ar") continue;
+      if (lang === "en" && item.lang !== "en") continue;
+      // Niche locales: keep locale items and let English fill the gaps
+      if (lang && lang !== "en" && lang !== "ar" && item.lang !== lang && item.lang !== "en") continue;
       items.push(item);
     }
   }

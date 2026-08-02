@@ -7,6 +7,7 @@ import type { Locale } from "@/lib/locales";
 import type { Dict } from "@/lib/i18n";
 import { NewsCard } from "@/components/site/NewsCard";
 import { ArtImage } from "@/components/ui/ArtImage";
+import { CountUp } from "@/components/ui/CountUp";
 
 export function SearchClient({ lang, dict }: { lang: Locale; dict: Dict }) {
   const router = useRouter();
@@ -74,7 +75,10 @@ export function SearchClient({ lang, dict }: { lang: Locale; dict: Dict }) {
 
         {q.trim() && (
           <p className="mt-6 font-mono text-[11px] tracking-widest text-ink3 uppercase">
-            {dict.search.resultsFor} <span className="text-gold">“{q.trim()}”</span> — {results.length}
+            {dict.search.resultsFor} <span className="text-gold">“{q.trim()}”</span> —{" "}
+            <span className="tabular-nums">
+              <CountUp value={results.length} />
+            </span>
           </p>
         )}
 

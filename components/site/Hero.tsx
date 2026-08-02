@@ -5,6 +5,7 @@ import type { Locale } from "@/lib/locales";
 import { ArtImage } from "@/components/ui/ArtImage";
 import { LiveClock } from "@/components/ui/LiveClock";
 import { TiltCard } from "@/components/ui/TiltCard";
+import { Parallax } from "@/components/ui/Parallax";
 import { getHeroCopy } from "@/lib/hero";
 
 export function Hero({ lang, dict }: { lang: Locale; dict: Dict }) {
@@ -31,7 +32,7 @@ export function Hero({ lang, dict }: { lang: Locale; dict: Dict }) {
             {d.eyebrow}
           </p>
 
-          <h1 className="font-display text-[clamp(2.6rem,7vw,5.4rem)] leading-[0.98] font-black tracking-tight text-ink">
+          <h1 className="headline-depth font-display text-[clamp(2.6rem,7vw,5.4rem)] leading-[0.98] font-black tracking-tight text-ink">
             {hc.headline[0]}
             <br />
             <span className="gold-text font-italic">{hc.headline[1]}</span>
@@ -69,7 +70,7 @@ export function Hero({ lang, dict }: { lang: Locale; dict: Dict }) {
           </div>
         </div>
 
-        <div className="relative z-10 flex min-h-[420px] flex-col justify-center gap-6 lg:min-h-[520px] lg:gap-8 lg:ps-10">
+        <Parallax speed={0.07} className="relative z-10 flex min-h-[420px] flex-col justify-center gap-6 lg:min-h-[520px] lg:gap-8 lg:ps-10">
           <div aria-hidden className="absolute -top-16 end-0 size-64 rounded-full border border-gold/20 animate-spin-slow" />
           <div aria-hidden className="absolute -top-10 end-10 size-44 rounded-full border border-nile/20 animate-spin-slow" style={{ animationDirection: "reverse", animationDuration: "34s" }} />
           <div aria-hidden className="absolute bottom-4 start-4 size-24 rounded-full bg-gold/10 blur-2xl animate-orb" />
@@ -126,7 +127,19 @@ export function Hero({ lang, dict }: { lang: Locale; dict: Dict }) {
                 </TiltCard>
               </div>
             ))}
-        </div>
+        </Parallax>
+
+        <a
+          href="#latest"
+          aria-label={d.latest}
+          className="absolute bottom-5 left-1/2 hidden -translate-x-1/2 lg:block"
+        >
+          <span className="animate-bounce-soft block">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className="text-ink3" aria-hidden>
+              <path d="M6 9l6 6 6-6" />
+            </svg>
+          </span>
+        </a>
       </div>
     </section>
   );

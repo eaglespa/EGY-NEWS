@@ -363,12 +363,188 @@ body {
   perspective: 1100px;
 }
 .tilt-card {
+  position: relative;
   transform-style: preserve-3d;
   transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.35s ease, border-color 0.35s ease;
   will-change: transform;
 }
 .tilt-card:hover {
   border-color: var(--border-strong);
+}
+.tilt-card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  z-index: 30;
+  pointer-events: none;
+  background: radial-gradient(
+    260px circle at var(--mx, 50%) var(--my, 50%),
+    color-mix(in srgb, var(--gold) 20%, transparent),
+    transparent 65%
+  );
+  opacity: 0;
+  transition: opacity 0.35s ease;
+}
+.tilt-card:hover::after,
+.tilt-card:focus-within::after {
+  opacity: 1;
+}
+
+/* Brand lockup 3D */
+.logo-lockup {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  transform-style: preserve-3d;
+  transition: transform 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+}
+a:hover .logo-lockup,
+a:focus-visible .logo-lockup {
+  transform: rotateY(-14deg);
+}
+[dir="rtl"] a:hover .logo-lockup,
+[dir="rtl"] a:focus-visible .logo-lockup {
+  transform: rotateY(14deg);
+}
+
+/* Nav underline grow */
+.nav-link {
+  position: relative;
+}
+.nav-link::after {
+  content: "";
+  position: absolute;
+  inset-inline: 0.6rem;
+  bottom: 0.45rem;
+  height: 2px;
+  border-radius: 2px;
+  background: var(--gold);
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+}
+[dir="rtl"] .nav-link::after {
+  transform-origin: right center;
+}
+.nav-link:hover::after,
+.nav-link:focus-visible::after {
+  transform: scaleX(1);
+}
+
+/* Theme toggle 3D flip */
+.theme-icon {
+  display: block;
+  transform-style: preserve-3d;
+  transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+}
+button:hover .theme-icon,
+button:focus-visible .theme-icon {
+  transform: rotateY(180deg);
+}
+
+/* Cinematic headline depth */
+.headline-depth {
+  text-shadow:
+    0 2px 0 color-mix(in srgb, var(--bg) 55%, transparent),
+    0 14px 40px color-mix(in srgb, var(--gold) 24%, transparent);
+}
+
+/* Scroll reveal */
+.reveal {
+  opacity: 0;
+  transform: translateY(26px) scale(0.99);
+  transition:
+    opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.reveal.is-revealed {
+  opacity: 1;
+  transform: none;
+}
+
+/* Shine sweep */
+.shine {
+  position: absolute;
+  inset: 0;
+  z-index: 10;
+  pointer-events: none;
+  background: linear-gradient(
+    115deg,
+    transparent 32%,
+    color-mix(in srgb, var(--gold) 10%, rgba(255, 255, 255, 0.14)) 50%,
+    transparent 68%
+  );
+  transform: translateX(-130%) skewX(-12deg);
+  transition: transform 0.9s ease;
+}
+.group:hover .shine,
+.group:focus-within .shine {
+  transform: translateX(130%) skewX(-12deg);
+}
+
+/* Skeleton shimmer */
+.skeleton {
+  position: relative;
+  overflow: hidden;
+  background: var(--panel);
+}
+.skeleton::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  transform: translateX(-100%);
+  background: linear-gradient(90deg, transparent, var(--panel-2), transparent);
+  animation: shimmer-slide 1.4s infinite;
+}
+@keyframes shimmer-slide {
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+/* 3D press */
+.press {
+  transition: transform 0.15s ease, box-shadow 0.15s ease, filter 0.15s ease;
+}
+.press:active {
+  transform: translateY(1px) scale(0.985);
+}
+
+/* Gold focus ring */
+:focus-visible {
+  outline: 2px solid color-mix(in srgb, var(--gold) 80%, transparent);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* Scroll chevron */
+@keyframes bounce-soft {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(7px);
+  }
+}
+.animate-bounce-soft {
+  animation: bounce-soft 1.8s ease-in-out infinite;
+}
+
+/* Toast */
+@keyframes toast-in {
+  from {
+    opacity: 0;
+    transform: translateY(14px) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+.animate-toast-in {
+  animation: toast-in 0.35s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
 @media (prefers-reduced-motion: reduce) {

@@ -13,7 +13,7 @@ export async function generateMetadata({
   const { lang } = await params;
   const dict = getDict(lang);
   return {
-    title: `${dict.nav.search} — ${SITE.brand}`,
+    title: dict.nav.search,
     description: dict.meta.description,
     alternates: { canonical: `${SITE.domain}/${lang}/search` },
   };
